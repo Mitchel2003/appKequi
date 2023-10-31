@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorFrom">#9C9C9C</color>
+
+    //gradual
+    <color name="colorT1">#E8DAEF</color>
+    <color name="colorT2">#D2B4DE</color>
+    <color name="colorT3">#BB8FCE</color>
+    <color name="colorT4">#A569BD </color>
+    <color name="colorT5">#8E44AD</color>
+    <color name="colorT6">#7D3C98</color>
+
+    //cian and red 99 opacity
+    <color name="azul">#6000C2FF</color>
+    <color name="rojo">#60FF0059</color>
+
+    //cian and red
+    <color name="azulBackground">#2000C2FF</color>
+    <color name="rojoBackground">#20FF0059</color>
+
+    //backgroud slash screen
+    <color name="background">#30BB8FCE</color>
+</resources>

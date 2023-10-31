@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">appKequi</string>
+
+    //MainActivity
+    <string name="empty"></string>
+    <string name="upToBancolombia">from</string>
+
+    //LoginActivity
+    <string name="textRegister">Login</string>
+    <string name="editTextEmail">Email</string>
+    <string name="textPassword">Password</string>
+    <string name="buttonAccept">Entry</string>
+    <string name="buttonAccount">or create new account</string>
+</resources>
