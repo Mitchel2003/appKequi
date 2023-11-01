@@ -5,132 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_launcher_background"
-    android:backgroundTint="@color/background"
-    tools:context=".MainActivity"
-    tools:layout_editor_absoluteX="75dp"
-    tools:layout_editor_absoluteY="276dp">
-
-    <TextView
-        android:id="@+id/azul2"
-        android:layout_width="468dp"
-        android:layout_height="442dp"
-        android:layout_marginStart="-40dp"
-        android:layout_marginTop="-40dp"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/azulBackground"
-        android:rotation="200"
-        android:text="@string/empty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <TextView
-        android:id="@+id/rojo2"
-        android:layout_width="468dp"
-        android:layout_height="436dp"
-        android:layout_marginStart="-40dp"
-        android:layout_marginTop="-40dp"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/rojoBackground"
-        android:rotation="405"
-        android:text="@string/empty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+    android:backgroundTint="@color/colorT1"
+    tools:context="com.wposs.appkequi.MainActivity">
 
     <ImageView
-        android:id="@+id/imageViewLogo"
-        android:layout_width="153dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
+        android:id="@+id/imageViewBBVA"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/kequi_logo_imag" />
 
-    <ImageView
-        android:id="@+id/imageViewKequi"
-        android:layout_width="266dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="135dp"
-        android:layout_marginTop="266dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/kequi_letra_imag" />
-
-    <TextView
-        android:id="@+id/azul"
-        android:layout_width="234dp"
-        android:layout_height="212dp"
-        android:layout_marginStart="244dp"
-        android:layout_marginEnd="-67dp"
-        android:layout_marginBottom="-110dp"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/azul"
-        android:rotation="200"
-        android:text="@string/empty"
-        android:alpha="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/rojo"
-        android:layout_width="238dp"
-        android:layout_height="206dp"
-        android:layout_marginStart="244dp"
-        android:layout_marginEnd="-67dp"
-        android:layout_marginBottom="-110dp"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/rojo"
-        android:rotation="405"
-        android:text="@string/empty"
-        android:alpha="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:id="@+id/imageViewBancolombia"
-        android:layout_width="200dp"
-        android:layout_height="87dp"
-        android:layout_marginEnd="-10dp"
-        android:layout_marginBottom="-15dp"
-        android:alpha="0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/bancolombia_imag" />
-
     <TextView
         android:id="@+id/textViewFrom"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="-70dp"
-        android:alpha="0"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="100dp"
         android:fontFamily="sans-serif"
-        android:text="@string/upToBancolombia"
+        android:text="@string/upToMeta"
         android:textAlignment="center"
-        android:textColor="#434343"
+        android:textColor="@color/colorFrom"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewBBVA" />
+
+    <ImageView
+        android:id="@+id/imageViewMeta"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.989" />
-
+        app:layout_constraintTop_toBottomOf="@+id/textViewFrom"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/bancolombia_imag" />
 </androidx.constraintlayout.widget.ConstraintLayout>

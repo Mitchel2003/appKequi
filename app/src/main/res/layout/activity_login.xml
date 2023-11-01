@@ -5,135 +5,182 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_launcher_background"
-    android:backgroundTint="@color/background"
-    tools:context=".LoginActivity">
+    android:backgroundTint="@color/colorT1"
+    tools:context="com.wposs.appkequi.LoginActivity">
+
 
     <TextView
-        android:id="@+id/azulLg"
-        android:layout_width="434dp"
-        android:layout_height="412dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginEnd="-100dp"
-        android:layout_marginBottom="-100dp"
-        android:alpha="0"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/azulBackground"
-        android:rotation="200"
-        android:text="@string/empty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/rojoLg"
-        android:layout_width="438dp"
-        android:layout_height="406dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginEnd="-100dp"
-        android:layout_marginBottom="-100dp"
-        android:alpha="0"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/rojoBackground"
-        android:rotation="405"
-        android:text="@string/empty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/textRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed-light"
-        android:text="@string/textRegister"
-        android:textColor="@color/colorT1"
-        android:textSize="26sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174" />
-
-    <TableLayout
-        android:id="@+id/tableRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.31">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/editTextEmail"
-                android:inputType="text"
-                android:text="@string/empty"
-                android:textColor="@color/colorT1"
-                android:textColorHint="@color/colorFrom"
-                android:textSize="20sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/editTextPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/textPassword"
-                android:inputType="textPassword"
-                android:textColor="@color/colorT1"
-                android:textColorHint="@color/colorFrom"
-                android:textSize="20sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:id="@+id/buttonAccept"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/rojoBackground"
-                android:text="@string/buttonAccept"
-                android:textAllCaps="false"
-                android:textColor="@color/colorT1" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </TableRow>
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/textCreateAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonAccount"
+        android:id="@+id/textViewEncabezado1"
+        android:layout_width="396dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:drawable/alert_dark_frame"
+        android:backgroundTint="@color/colorT6"
+        android:fontFamily="@font/archivo"
+        android:text="@string/Encabezado1"
         android:textAlignment="center"
         android:textColor="@color/colorT2"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewEncabezado3"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="100dp"
+        android:background="@android:drawable/divider_horizontal_dark"
+        android:backgroundTint="@color/colorT6"
+        android:fontFamily="@font/alice"
+        android:text="@string/Encabezado3"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEncabezado1" />
+
+    <TextView
+        android:id="@+id/textViewEnunciado1"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="serif"
+        android:text="@string/Enunciado1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEncabezado3" />
+
+    <EditText
+        android:id="@+id/editTextNum1"
+        android:layout_width="246dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@android:drawable/alert_light_frame"
+        android:backgroundTint="@color/colorT2"
+        android:ems="10"
+        android:fontFamily="@font/baloo"
+        android:hint="@string/editText1"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEnunciado1" />
+
+    <EditText
+        android:id="@+id/editTextNum2"
+        android:layout_width="246dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@android:drawable/alert_light_frame"
+        android:backgroundTint="@color/colorT2"
+        android:ems="10"
+        android:fontFamily="@font/baloo"
+        android:hint="@string/editText2"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNum1" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="10dp"
+        android:buttonTint="@color/colorT6"
+        android:fontFamily="@font/acme"
+        android:text="@string/checkBox1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNum2" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="3dp"
+        android:buttonTint="@color/colorT6"
+        android:fontFamily="@font/acme"
+        android:text="@string/checkBox2"
+        android:textAlignment="viewStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox1" />
+
+    <TextView
+        android:id="@+id/textViewEnunciado2"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="84dp"
+        android:fontFamily="serif"
+        android:text="@string/Enunciado2"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+
+    <TextView
+        android:id="@+id/textViewAnswer"
+        android:layout_width="281dp"
+        android:layout_height="104dp"
+        android:background="@drawable/ic_launcher_background"
+        android:backgroundTint="#FFFFFF"
+        android:fontFamily="@font/alice"
+        android:text="@string/answer"
+        android:textAlignment="center"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewEnunciado2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textViewEncabezado2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:fontFamily="@font/alice"
+        android:text="@string/Encabezado2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/colorT4"
+        android:fontFamily="@font/aclonica"
+        android:onClick="generarRegistro"
+        android:text="@string/button1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:background="@drawable/ic_launcher_background"
+        android:backgroundTint="@color/colorT1"
+        android:fontFamily="serif"
+        android:onClick="goToDataBaseActivity"
+        android:text="@string/button2"
+        android:textAllCaps="false"
+        android:textColor="@color/colorT4"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAnswer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

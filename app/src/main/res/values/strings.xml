@@ -2,13 +2,35 @@
     <string name="app_name">appKequi</string>
 
     //MainActivity
-    <string name="empty"></string>
-    <string name="upToBancolombia">from</string>
+    <string name="upToMeta">from</string>
 
     //LoginActivity
-    <string name="textRegister">Login</string>
-    <string name="editTextEmail">Email</string>
-    <string name="textPassword">Password</string>
-    <string name="buttonAccept">Entry</string>
-    <string name="buttonAccount">or create new account</string>
+    <string name="Encabezado1">Ministerio de reparación de victimas</string>
+    <string name="Encabezado2">Para la reubicacion de las victimas del conflicto armado</string>
+    <string name="Encabezado3">Registro</string>
+    <string name="Enunciado1">Ingrese la información</string>
+    <string name="editText1">Nombre</string>
+    <string name="editText2">N° Cedula</string>
+    <string name="checkBox1">Desplazado</string>
+    <string name="checkBox2">Devengas menos del SMMLV</string>
+    <string name="button1">Validar</string>
+    <string name="button2">Base de datos</string>
+    <string name="Enunciado2">Comunicado</string>
+    <string name="answer"> . . . </string>
+
+    //DataBaseActivity
+    <string name="textViewTitle">Historial registros</string>
+    <string name="buttonBack">Back</string>
+    <string name="buttonManagementBD">Gestion BD</string>
+    <string name="textViewBD"></string>
+
+    //AdminSQLite
+    <string name="textViewTitleBD">Management Data Base</string>
+    <string name="textViewId">ID:</string>
+    <string name="texViewAnswer"> . . . </string>
+    <string name="editTextId">usuario</string>
+    <string name="buttonSearch">Buscar</string>
+    <string name="buttonDelete">Eliminar</string>
+    <string name="buttonBackToDBActivity">Back</string>
+
 </resources>
