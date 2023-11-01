@@ -11,7 +11,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
+//project
 public class LoginActivity extends AppCompatActivity {
 
     private TextView backgroundBlue, backgroundRed, login, createAccount;
