@@ -8,7 +8,7 @@
     <color name="colorT1">#E8DAEF</color>
     <color name="colorT2">#D2B4DE</color>
     <color name="colorT3">#BB8FCE</color>
-    <color name="colorT4">#A569BD </color>
+    <color name="colorT4">#A569BD</color>
     <color name="colorT5">#8E44AD</color>
     <color name="colorT6">#7D3C98</color>
 
@@ -21,5 +21,13 @@
     <color name="rojoBackground">#20FF0059</color>
 
     //backgroud slash screen
-    <color name="background">#30BB8FCE</color>
+    <color name="background">#E8DAEF</color>
+    <color name="error">#CBFF6969</color>
+
+
+    //for theme application
+    <color name="colorPrimary">#A569BD</color>
+    <color name="colorPrimaryDark">#5E2F71</color>
+    <color name="colorAccent">#D2B4DE</color>
+
 </resources>

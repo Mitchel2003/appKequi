@@ -1,14 +1,28 @@
 <resources>
-    <string name="app_name">appKequi</string>
+    <string name="app_name">Kequi</string>
 
     //MainActivity
     <string name="empty"></string>
     <string name="upToBancolombia">from</string>
 
     //LoginActivity
-    <string name="textRegister">Login</string>
+    <string name="textLogin">Login</string>
     <string name="editTextEmail">Email</string>
     <string name="textPassword">Password</string>
     <string name="buttonAccept">Entry</string>
     <string name="buttonAccount">or create new account</string>
+
+    //RegisterActivity
+    <string name="textRegister">Register</string>
+    <string name="textEnunciado1">Fill out the fields and register</string>
+    <string name="editName">Name</string>
+    <string name="editLastname">Last name</string>
+    <string name="textEnunciado2">entry your credentials</string>
+    <string name="editEmail">Email</string>
+    <string name="editPassword">Password</string>
+    <string name="editConfirmPassword">Confirm password</string>
+    <string name="textEnunciado3">type your document</string>
+    <string name="editNumberDocument">Number document</string>
+    <string name="buttonValidate">Validate</string>
+
 </resources>

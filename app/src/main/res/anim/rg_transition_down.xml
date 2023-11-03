@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
+
     <!-- anim translation -->
     <alpha
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
-        android:duration="4000"/>
+        android:duration="2000"/>
 
     <!-- anim change size  -->
     <scale
@@ -14,12 +15,12 @@
         android:toYScale="1.0"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:duration="4000"/>
+        android:duration="2000"/>
 
     <!-- anim translation -->
     <translate
         android:fromYDelta="-150%"
         android:toYDelta="0%"
-        android:duration="4000"/>
+        android:duration="2000"/>
 
 </set>

@@ -6,6 +6,11 @@ android {
     namespace = "com.wposs.appkequi"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding=true
+    }
+
+
     defaultConfig {
         applicationId = "com.wposs.appkequi"
         minSdk = 22

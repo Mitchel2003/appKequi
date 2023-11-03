@@ -21,14 +21,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
-        //animations
+
+        //layout
         logo=(ImageView) findViewById(R.id.imageViewLogo);                  azul=(TextView) findViewById(R.id.azul);
         kequi=(ImageView) findViewById(R.id.imageViewKequi);                rojo=(TextView) findViewById(R.id.rojo);
         from=(TextView) findViewById(R.id.textViewFrom);                    azul2=(TextView) findViewById(R.id.azul2);
         bancolombia=(ImageView) findViewById(R.id.imageViewBancolombia);    rojo2=(TextView) findViewById(R.id.rojo2);
 
+        animations();
+
+    }
+
+
+    private void animations(){
         //transitions
         Animation animDown= AnimationUtils.loadAnimation(this,R.anim.transition_down);
         Animation animUp= AnimationUtils.loadAnimation(this,R.anim.transition_up);

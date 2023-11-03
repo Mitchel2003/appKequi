@@ -8,60 +8,93 @@
     android:backgroundTint="@color/background"
     tools:context=".LoginActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="-80dp"
+        android:layout_marginTop="-100dp"
+        android:layout_marginEnd="-80dp"
+        android:layout_marginBottom="-170dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/anim_background_login" />
+
     <TextView
-        android:id="@+id/azulLg"
-        android:layout_width="434dp"
-        android:layout_height="412dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginEnd="-100dp"
-        android:layout_marginBottom="-100dp"
-        android:alpha="0"
-        android:background="@drawable/figura_cuadrado_transparente"
-        android:backgroundTint="@color/azulBackground"
-        android:rotation="200"
+        android:id="@+id/textViewPostBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/figura_cuadrado"
         android:text="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/rojoLg"
         android:layout_width="438dp"
         android:layout_height="406dp"
-        android:layout_marginStart="68dp"
         android:layout_marginEnd="-100dp"
         android:layout_marginBottom="-100dp"
-        android:alpha="0"
+        android:alpha="1"
         android:background="@drawable/figura_cuadrado_transparente"
         android:backgroundTint="@color/rojoBackground"
         android:rotation="405"
         android:text="@string/empty"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/textRegister"
-        android:layout_width="wrap_content"
+        android:id="@+id/azulLg"
+        android:layout_width="434dp"
+        android:layout_height="412dp"
+        android:layout_marginEnd="-100dp"
+        android:layout_marginBottom="-100dp"
+        android:alpha="1"
+        android:background="@drawable/figura_cuadrado_transparente"
+        android:backgroundTint="@color/azulBackground"
+        android:rotation="200"
+        android:text="@string/empty"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textLogin"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed-light"
-        android:text="@string/textRegister"
-        android:textColor="@color/colorT1"
+        android:text="@string/textLogin"
+        android:textAlignment="center"
+        android:textColor="@color/colorT4"
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.174" />
+        app:layout_constraintTop_toTopOf="@+id/textViewPostBackground"
+        app:layout_constraintVertical_bias="0.034" />
 
     <TableLayout
         android:id="@+id/tableRegister"
         android:layout_width="wrap_content"
-        android:layout_height="160dp"
+        android:layout_height="220dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -100,6 +133,7 @@
                 android:textColor="@color/colorT1"
                 android:textColorHint="@color/colorFrom"
                 android:textSize="20sp" />
+
         </TableRow>
 
         <TableRow
@@ -107,33 +141,30 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/buttonAccept"
+                android:id="@+id/buttonEntry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/rojoBackground"
                 android:text="@string/buttonAccept"
                 android:textAllCaps="false"
-                android:textColor="@color/colorT1" />
+                android:textColor="@color/colorT2"
+                android:textSize="16sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/buttonCreateAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#2000C2FF"
+                android:onClick="register"
+                android:text="@string/buttonAccount"
+                android:textColor="@color/colorFrom"
+                android:textSize="14sp" />
         </TableRow>
     </TableLayout>
-
-    <TextView
-        android:id="@+id/textCreateAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonAccount"
-        android:textAlignment="center"
-        android:textColor="@color/colorT2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.463" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
