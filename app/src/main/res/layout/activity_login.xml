@@ -145,6 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/rojoBackground"
+                android:onClick="entry"
                 android:text="@string/buttonAccept"
                 android:textAllCaps="false"
                 android:textColor="@color/colorT2"

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "873565103961",
+    "project_id": "appkequi",
+    "storage_bucket": "appkequi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873565103961:android:e807ef0dca101e69cf0e48",
+        "android_client_info": {
+          "package_name": "com.wposs.appkequi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-bn1gecrgskqUiTTFshUhOLcFy-aGCD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

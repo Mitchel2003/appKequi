@@ -1,5 +1,6 @@
 package com.wposs.appkequi;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.PatternsCompat;
 import android.content.Intent;
@@ -13,18 +14,24 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     //regularExpressions for password
-    private static final String passwordRegularExpressions = "^(?=.*\\\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
+    private static final String passwordRegularExpressions = "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}";
 
     //layout
     private TextView textRegister, postBackground;
@@ -32,6 +39,9 @@ public class RegisterActivity extends AppCompatActivity {
     private ScrollView table;
     private EditText name, lastName, confirmPassword, document;
     private TextInputLayout email, password;                        private TextInputEditText inEmail, inPassword;
+
+    //bd FireBase
+    private FirebaseAuth bd;        private ProgressBar barra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,27 +55,76 @@ public class RegisterActivity extends AppCompatActivity {
         password=findViewById(R.id.editPassword);                   table=findViewById(R.id.scrollView);                    ColorStateList standColorHint=ColorStateList.valueOf(basicColorHint);
         inEmail=findViewById(R.id.inEmail);                         postBackground=findViewById(R.id.textPostBackground);
         inPassword=findViewById(R.id.inPassword);
-        confirmPassword=findViewById(R.id.editConfirmPassword);
+        confirmPassword=findViewById(R.id.editConfirmPassword);     barra=findViewById(R.id.progress);
         document=findViewById(R.id.editDocument);
 
         animations();
+
+        //convert to String
+        String openEmail, openPassword;
+        openEmail=inEmail.getText().toString(); openPassword=inPassword.getText().toString();
+
+            inEmail.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    result();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+
+                    }
+
+            });
 
     }
 
     public void validate(){
         try {
-
             //converting layout in string                                                                       colors
             String tempName, tempLastName, tempEmail, tempPassword, tempConfirmPassword, tempDocument;          int error=getResources().getColor(R.color.error);       int basicTint=getResources().getColor(R.color.colorFrom);
             tempName=name.getText().toString();                                                                 ColorStateList red=ColorStateList.valueOf(error);       ColorStateList standTint=ColorStateList.valueOf(basicTint);
             tempLastName=lastName.getText().toString();                                                         int basicColorHint= getResources().getColor(R.color.colorT2);
-            tempEmail=email.getResources().toString();                                                               ColorStateList standColorHint=ColorStateList.valueOf(basicColorHint);
-            tempPassword=password.getResources().toString();
+            tempEmail=inEmail.getText().toString();                                                               ColorStateList standColorHint=ColorStateList.valueOf(basicColorHint);
+            tempPassword=inPassword.getText().toString();
             tempConfirmPassword=confirmPassword.getText().toString();
             tempDocument=document.getText().toString();
 
+            //progressBar
+            barra.setVisibility(View.VISIBLE);
+
             if(!tempName.isEmpty()&&!tempLastName.isEmpty()&&!tempEmail.isEmpty()&&!tempPassword.isEmpty()&&!tempConfirmPassword.isEmpty()&&!tempDocument.isEmpty()){
                 if (!tempConfirmPassword.contentEquals(tempPassword)) {//alternative equals ignore case()
+
+                    //bd                                goneProgressBar
+                    bd= FirebaseAuth.getInstance();     barra.setVisibility(View.GONE);
+
+                    String validEmail, validPassword;
+                    validEmail=inEmail.getText().toString();
+                    validPassword=inPassword.getText().toString();
+
+                    bd.createUserWithEmailAndPassword(validEmail, validPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, "Account created",Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+
+
+
+
 
                     confirmPassword.setBackgroundTintList(red);
                     confirmPassword.setHintTextColor(red);
@@ -125,20 +184,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     //result of validations
     private void result(){
-        //return through a array boolean
-        boolean [] equalsValidate={validationEmail(),validationPassword()};//in "{}" the first value "index 0" is the return of method validationEmail; after the comma is the next index
+        //return through a boolean
+        boolean v1=validationEmail();
+        boolean v2=validationPassword();
 
-        if(!equalsValidate.equals(0)||!equalsValidate.equals(1)) {
-
-        }else {
-            Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-        }
+            if(!v1||!v2) {
+                return;
+            }
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
     }
 
     //Validation email and password
     private boolean validationEmail(){
         //of textInputEditText to string                            multiChar
-        String tempEmail=inEmail.getResources().toString();         String case1="This site can´t been empty";
+        String tempEmail=inEmail.getText().toString();              String case1="This site can´t been empty";
                                                                     String case2="Please, enter a valid email";
         if(tempEmail.isEmpty()) {
             email.setError(case1);
@@ -155,7 +214,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private boolean validationPassword(){
         //of textInputEditText to string                                multiChar
-        String tempPassword=inPassword.getResources().toString();       String case1="This site can´t been empty";
+        String tempPassword=inPassword.getText().toString();            String case1="This site can´t been empty";
                                                                         String case2="Password is too weak";
         //class pattern
         Pattern patron=Pattern.compile(passwordRegularExpressions);
