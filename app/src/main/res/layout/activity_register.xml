@@ -71,27 +71,35 @@
                 android:text="@string/textEnunciado1"
                 android:textSize="16sp" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorFrom"
-                android:ems="10"
-                android:hint="@string/editName"
-                android:inputType="text"
-                android:textColorHint="@color/colorT2"
-                android:textSize="20sp" />
+                android:layout_marginTop="0dp"
+                android:hint="@string/editName">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editLastName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorFrom"
-                android:ems="10"
-                android:hint="@string/editLastname"
-                android:inputType="text"
-                android:textColorHint="@color/colorT2"
-                android:textSize="20sp" />
+                android:layout_marginTop="0dp"
+                android:hint="@string/editLastname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textEmpty"
@@ -139,16 +147,21 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editConfirmPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorFrom"
-                android:ems="10"
+                android:layout_marginTop="0dp"
                 android:hint="@string/editConfirmPassword"
-                android:inputType="textPassword"
-                android:textColorHint="@color/colorT2"
-                android:textSize="20sp" />
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/textEmpty2"
@@ -165,16 +178,20 @@
                 android:text="@string/textEnunciado3"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/editDocument"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editNumberPhone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorFrom"
-                android:ems="10"
-                android:hint="@string/editNumberDocument"
-                android:inputType="number"
-                android:textColorHint="@color/colorT2"
-                android:textSize="20sp" />
+                android:layout_marginTop="0dp"
+                android:hint="@string/editNumberDocument">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inNumberPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -205,6 +222,7 @@
         android:layout_marginEnd="150dp"
         android:backgroundTint="@color/rojoBackground"
         android:fontFamily="sans-serif-condensed-light"
+        android:onClick="validate"
         android:text="@string/buttonValidate"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/textPostBackground"
@@ -229,15 +247,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
