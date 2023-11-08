@@ -3,5 +3,6 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/alice</item>
         <item>@font/andika</item>
+        <item>@font/bad_script</item>
     </array>
 </resources>

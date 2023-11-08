@@ -25,4 +25,13 @@
     <string name="editNumberDocument">Phone</string>
     <string name="buttonValidate">Validate</string>
 
+    //LobbyActivity
+    <string name="options">Options</string>
+    <string name="signOff">Sign off</string>
+    <string name="textWelcome">Welcome sr. </string>
+    <string name="textBalance">Your balance is</string>
+    <string name="textNumberBalance">---.---</string>
+
+
+
 </resources>

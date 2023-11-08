@@ -64,7 +64,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textEnunciado1"
+                android:id="@+id/textSignOff"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/andika"
@@ -232,7 +232,7 @@
         app:layout_constraintVertical_bias="0.981" />
 
     <ImageButton
-        android:id="@+id/buttonBack"
+        android:id="@+id/buttonOptions"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"

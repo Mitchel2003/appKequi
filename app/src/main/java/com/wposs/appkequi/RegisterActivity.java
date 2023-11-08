@@ -28,7 +28,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -51,7 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //layout                                                    components
         name=findViewById(R.id.editName);                           textRegister=findViewById(R.id.textRegister);
-        inName=findViewById(R.id.inName);                           buttonBack=findViewById(R.id.buttonBack);
+        inName=findViewById(R.id.inName);                           buttonBack=findViewById(R.id.buttonOptions);
         lastName=findViewById(R.id.editLastName);                   buttonValidate=findViewById(R.id.buttonValidate);
         inLastName=findViewById(R.id.inLastName);                   table=findViewById(R.id.scrollView);
         email=findViewById(R.id.editEmail);                         postBackground=findViewById(R.id.textPostBackground);

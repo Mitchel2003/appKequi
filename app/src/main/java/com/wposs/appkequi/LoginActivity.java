@@ -48,8 +48,9 @@ public class LoginActivity extends AppCompatActivity {
         openBD=bd.collection("user");
         auth=FirebaseAuth.getInstance();
 
-    }//
+    }
 
+    //buttons login
     public void entry(View see){
 
             String thisEmail, thisPassword;
@@ -64,9 +65,20 @@ public class LoginActivity extends AppCompatActivity {
                        QuerySnapshot consult=task.getResult();
 
                        if(consult!=null&&!consult.isEmpty()){
-                           Toast.makeText(LoginActivity.this,"encontrado",Toast.LENGTH_SHORT).show();
+
+                           Toast.makeText(LoginActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
+                           new Handler().postDelayed(new Runnable() {
+                               @Override
+                               public void run() {
+                                   Intent go=new Intent(getApplicationContext(),LobbyActivity.class);
+                                   startActivity(go);
+                                   overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                   finish();
+                               }
+                           },1000);
+
                        }else{
-                           Toast.makeText(LoginActivity.this,"no encontrado",Toast.LENGTH_SHORT).show();
+                           Toast.makeText(LoginActivity.this,"Sorry, you are not registered",Toast.LENGTH_SHORT).show();
                        }
                    }else{
                        Toast.makeText(LoginActivity.this,"error task entry_LoginActivity",Toast.LENGTH_SHORT).show();
@@ -77,9 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this,"Enter the fields",Toast.LENGTH_SHORT).show();
             }
 
-
     }
-
     public void register(View see){
         Intent go=new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(go);
