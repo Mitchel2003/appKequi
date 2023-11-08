@@ -20,8 +20,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -31,8 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
     //variables                                                                                                     layout
     private TextInputLayout name, lastName, email, password, confirmPassword, numberPhone;                          private TextView textRegister, postBackground;
     private TextInputEditText inName, inLastName, inEmail, inPassword, inConfirmPassword, inNumberPhone;            private ImageButton buttonBack;     private Button buttonValidate;
-                                                                                                                    private ScrollView table;
-    private FirebaseFirestore bd;
+
+    //DataBase Firebase Fire Store
+    private FirebaseFirestore bd;           private final double money= 1000000;                                                                        private ScrollView table;
+    private CollectionReference openBD;
+    private FirebaseAuth auth;
+    private DocumentReference document;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         //OnBD                                  //animations
         bd=FirebaseFirestore.getInstance();     animations();
+        openBD=bd.collection("user");
+        auth=FirebaseAuth.getInstance();
 
             inEmail.addTextChangedListener(new TextWatcher() {
 
@@ -107,21 +117,31 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             if(!tempName.isEmpty()&&!tempLastName.isEmpty()&&!tempEmail.isEmpty()&&!tempPassword.isEmpty()&&!tempConfirmPassword.isEmpty()&&!tempNumberPhone.isEmpty()){
-
                 if (tempConfirmPassword.contentEquals(tempPassword)) {//alternative equals ignore case()
 
-                    putDate(tempName, tempLastName, tempEmail, tempPassword, tempNumberPhone);
-                    Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+                    openBD.whereEqualTo("numberPhone",tempNumberPhone).get().addOnCompleteListener(task -> {
 
-                    //clean errors
-                    inName.setError(null);  inLastName.setError(null);  inEmail.setError(null); inPassword.setError(null);  inConfirmPassword.setError(null);   inNumberPhone.setError(null);
+                        if(task.isSuccessful()){
+                            QuerySnapshot consult=task.getResult();
+
+                            if(consult!=null&&!consult.isEmpty()){
+                                Toast.makeText(this, "Sorry, this numberPhone already exist", Toast.LENGTH_SHORT).show();
+                            }else{
+                                putDate(tempName, tempLastName, tempEmail, tempPassword, tempNumberPhone);
+                                Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+                                //clean errors
+                                inName.setError(null);inLastName.setError(null);inEmail.setError(null);inPassword.setError(null);inConfirmPassword.setError(null);inNumberPhone.setError(null);
+                            }
+                        }else{
+                            Toast.makeText(this, "error task validate_RegisterActivity", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                 }else {
                     //confirmPassword
                     Toast.makeText(this, "the password not is equals, please retry", Toast.LENGTH_SHORT).show();
                     confirmPassword.setError("not is equals");
                 }
-
             }else{
                 String error="empty";
                 if(tempName.isEmpty()){
@@ -139,12 +159,10 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 Toast.makeText(this,"Characters obligatory",Toast.LENGTH_SHORT).show();
             }
-
         }catch (Exception e) {
             Toast.makeText(this, "Error validate_RegisterActivity", Toast.LENGTH_SHORT).show();
         }
     }
-
 
 
     //-------------------------------------------------ads------------------------------------------
@@ -196,25 +214,30 @@ public class RegisterActivity extends AppCompatActivity {
 
     //send to bd
     private void putDate(String name, String lastName, String email, String password, String numberPhone){
+        //create documentReference with bd "user" and a id specific
+        document=bd.collection("user").document(numberPhone);
 
+        //create a map for compilation of values
         Map<String, Object> map= new HashMap<>();
         map.put("name",name);
         map.put("lastName", lastName);
         map.put("email",email);
         map.put("password",password);
         map.put("numberPhone",numberPhone);
+        map.put("balance",money);
 
-       bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-           @Override
-           public void onSuccess(DocumentReference documentReference) {
-               Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
-           }
-       }).addOnFailureListener(new OnFailureListener() {
-           @Override
-           public void onFailure(@NonNull Exception e) {
-               Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
-           }
-       });
+        //in "user" with id personalized, we keep the map and send with "add" to bd
+        document.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override                                                                                                             //    @Override
+            public void onSuccess(Void unused) {//if completed                                                                    //    public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(RegisterActivity.this,"User saved successfully",Toast.LENGTH_SHORT).show();            //        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
+            }                                                                                                                     //    }
+        }).addOnFailureListener(new OnFailureListener() {                                                                         //}).addOnFailureListener(new OnFailureListener() {
+            @Override                                                                                                             //    @Override
+            public void onFailure(@NonNull Exception e) {//if failed                                                              //    public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RegisterActivity.this,"Work not completed",Toast.LENGTH_SHORT).show();                 //        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
+            }                                                                                                                     //    }
+        });                                                                                                                       //});
 
     }
 

@@ -1,6 +1,4 @@
 package com.wposs.appkequi;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,14 +20,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //variables
     private TextView backgroundBlue, backgroundRed,postBackground, login;  private Button entry, createAccount;
     private EditText email, password;
     private TableLayout tableRegister;
 
-    //dataBase
+    //DataBase Firebase Fire Store
     private FirebaseFirestore bd;
     private CollectionReference openBD;
-    private FirebaseAuth auth;//
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +43,12 @@ public class LoginActivity extends AppCompatActivity {
         createAccount=findViewById(R.id.buttonCreateAccount);                                                     postBackground= findViewById(R.id.textViewPostBackground);
         entry=findViewById(R.id.buttonEntry);
 
-        //dataBase on                           animations
-        bd= FirebaseFirestore.getInstance();    animations();
+        //dataBase on                               animations
+        bd= FirebaseFirestore.getInstance();        animations();
         openBD=bd.collection("user");
         auth=FirebaseAuth.getInstance();
 
-
-    }
+    }//
 
     public void entry(View see){
 
@@ -63,15 +61,15 @@ public class LoginActivity extends AppCompatActivity {
                 openBD.whereEqualTo("email",thisEmail).whereEqualTo("password",thisPassword).get().addOnCompleteListener(task -> {
 
                    if(task.isSuccessful()){
-                       QuerySnapshot qs=task.getResult();
+                       QuerySnapshot consult=task.getResult();
 
-                       if(qs!=null&&!qs.isEmpty()){
+                       if(consult!=null&&!consult.isEmpty()){
                            Toast.makeText(LoginActivity.this,"encontrado",Toast.LENGTH_SHORT).show();
                        }else{
                            Toast.makeText(LoginActivity.this,"no encontrado",Toast.LENGTH_SHORT).show();
                        }
                    }else{
-                       Toast.makeText(LoginActivity.this,"error consulta",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(LoginActivity.this,"error task entry_LoginActivity",Toast.LENGTH_SHORT).show();
                    }
                 });
 
