@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
     private TableLayout tableRegister;
 
-    //DataBase Firebase Fire Store
+    //DataBase Firebase
     private FirebaseFirestore bd;
     private CollectionReference openBD;
     private FirebaseAuth auth;
