@@ -161,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#2000C2FF"
-                android:onClick="register"
+                android:onClick="goToRegister"
                 android:text="@string/buttonAccount"
                 android:textColor="@color/colorFrom"
                 android:textSize="14sp" />

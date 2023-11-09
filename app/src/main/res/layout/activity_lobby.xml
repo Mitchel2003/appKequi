@@ -26,19 +26,20 @@
         app:lottie_rawRes="@raw/anim_background_register" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="242dp"
-        android:layout_height="281dp"
-        android:layout_marginStart="-40dp"
-        android:layout_marginBottom="-75dp"
+        android:id="@+id/lottieAnimationWallet"
+        android:layout_width="739dp"
+        android:layout_height="766dp"
+        android:layout_marginStart="-245dp"
+        android:layout_marginBottom="-160dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.965"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/anim_money_lobby" />
+        app:lottie_rawRes="@raw/anim_wallet" />
 
     <TextView
         android:id="@+id/rojoLg"
@@ -98,10 +99,10 @@
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.825" />
+        app:layout_constraintVertical_bias="0.855" />
 
     <TextView
         android:id="@+id/textNumberBalance"
@@ -112,10 +113,10 @@
         android:textSize="26sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.774"
+        app:layout_constraintHorizontal_bias="0.806"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.879" />
+        app:layout_constraintTop_toBottomOf="@+id/textBalance"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -125,7 +126,7 @@
         android:layout_marginTop="125dp"
         android:layout_marginEnd="70dp"
         android:layout_marginBottom="170dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -193,6 +194,7 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:background="@drawable/background"
+        android:backgroundTint="#204400FF"
         android:contentDescription="touchOutside"
         android:onClick="touchBackground"
         android:visibility="gone"
@@ -217,6 +219,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/LayoutWtext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -235,11 +238,36 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="560dp" />
+            android:layout_height="20dp" />
 
         <LinearLayout
+            android:id="@+id/LayoutWChangeMoney"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textChangeMoney"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/figura_cuadrado_transparente"
+                android:backgroundTint="@color/buttons"
+                android:fontFamily="@font/andika"
+                android:text="@string/changeMoney"
+                android:textAlignment="center"
+                android:textColor="@color/colorT1"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="485dp" />
+
+        <LinearLayout
+            android:id="@+id/LayoutWSignOff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickOptions"
             android:orientation="horizontal">
 
             <TextView
@@ -249,13 +277,71 @@
                 android:background="@drawable/background"
                 android:backgroundTint="@color/rojo"
                 android:fontFamily="@font/andika"
-                android:onClick="signOff"
                 android:text="@string/signOff"
                 android:textAlignment="center"
-                android:textAllCaps="false"
                 android:textColor="@color/colorT1"
                 android:textSize="25sp"
                 android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LayoutChangeMoney"
+        android:layout_width="187dp"
+        android:layout_height="152dp"
+        android:alpha="0"
+        android:background="@drawable/figura_cuadrado"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="42dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="118dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:visibility="visible">
+
+                    <RadioButton
+                        android:id="@+id/radioButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/moneyPeso"
+                        android:textSize="20sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/moneyEuro"
+                        android:textSize="20sp" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/moneyYen"
+                        android:textSize="20sp" />
+                </RadioGroup>
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

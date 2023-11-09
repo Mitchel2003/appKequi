@@ -1,6 +1,9 @@
 package com.wposs.appkequi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,9 +16,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
@@ -26,8 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private TableLayout tableRegister;
 
     //DataBase Firebase
-    private FirebaseFirestore bd;
-    private CollectionReference openBD;
+    private FirebaseFirestore bd;    private CollectionReference openBD;    private DatabaseReference bdReference;
     private FirebaseAuth auth;
 
     @Override
@@ -46,12 +52,14 @@ public class LoginActivity extends AppCompatActivity {
         //dataBase on                               animations
         bd= FirebaseFirestore.getInstance();        animations();
         openBD=bd.collection("user");
-        auth=FirebaseAuth.getInstance();
-
+        bdReference= FirebaseDatabase.getInstance().getReference();//read or write
+        auth=FirebaseAuth.getInstance();//authentication
     }
 
     //buttons login
     public void entry(View see){
+        //save user with sharedPreference
+        SharedPreferences preset= getSharedPreferences("info", Context.MODE_PRIVATE);
 
             String thisEmail, thisPassword;
             thisEmail=email.getText().toString();
@@ -66,16 +74,38 @@ public class LoginActivity extends AppCompatActivity {
 
                        if(consult!=null&&!consult.isEmpty()){
 
-                           Toast.makeText(LoginActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
-                           new Handler().postDelayed(new Runnable() {
+                           openBD.whereEqualTo("email",thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                @Override
-                               public void run() {
-                                   Intent go=new Intent(getApplicationContext(),LobbyActivity.class);
-                                   startActivity(go);
-                                   overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                                   finish();
+                               public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                   for(QueryDocumentSnapshot document :queryDocumentSnapshots){
+
+                                       String userName=document.getString("name");
+                                       String userLastName=document.getString("lastName");
+                                       String userNumber=document.getString("numberPhone");
+                                       Double userBalance=document.getDouble("balance");
+
+                                       //send info of user
+                                       SharedPreferences.Editor edit = preset.edit();
+                                       edit.putString("balance",String.valueOf(userBalance));
+                                       edit.putString("name",userName);
+                                       edit.putString("lastName",userLastName);
+                                       edit.putString("numberPhone",userNumber);
+                                       edit.commit();
+
+                                       Toast.makeText(LoginActivity.this,"Welcome",Toast.LENGTH_SHORT).show();
+                                       new Handler().postDelayed(new Runnable() {
+                                           @Override
+                                           public void run() {
+                                               Intent go=new Intent(getApplicationContext(),LobbyActivity.class);
+                                               startActivity(go);
+                                               overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                               finish();
+                                           }
+                                       },1000);
+
+                                   }
                                }
-                           },1000);
+                           });
 
                        }else{
                            Toast.makeText(LoginActivity.this,"Sorry, you are not registered",Toast.LENGTH_SHORT).show();
@@ -90,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
     }
-    public void register(View see){
+    public void goToRegister(View see){
         Intent go=new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(go);
         overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

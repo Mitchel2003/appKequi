@@ -28,10 +28,15 @@
     //LobbyActivity
     <string name="options">Options</string>
     <string name="signOff">Sign off</string>
-    <string name="textWelcome">Welcome sr. </string>
-    <string name="textBalance">Your balance is</string>
+    <string name="changeMoney">Change currency</string>
+    <string name="textWelcome">Welcome sr.</string>
+    <string name="textBalance">Your balance</string>
     <string name="textNumberBalance">---.---</string>
 
+        //change money
+        <string name="moneyPeso">Peso $</string>
+        <string name="moneyEuro">Euro €</string>
+        <string name="moneyYen">Yen ¥</string>
 
 
 </resources>

@@ -16,9 +16,10 @@
     <color name="azul">#6000C2FF</color>
     <color name="rojo">#60FF0059</color>
 
-    //cian and red
+    //colors transparent
     <color name="azulBackground">#2000C2FF</color>
     <color name="rojoBackground">#20FF0059</color>
+    <color name="buttons">#307700FF</color>
 
     //backgroud slash screen
     <color name="background">#E8DAEF</color>
