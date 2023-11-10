@@ -78,18 +78,21 @@ public class LoginActivity extends AppCompatActivity {
                                @Override
                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                    for(QueryDocumentSnapshot document :queryDocumentSnapshots){
-
+                                       //getting date of FireStore
                                        String userName=document.getString("name");
                                        String userLastName=document.getString("lastName");
                                        String userNumber=document.getString("numberPhone");
-                                       Double userBalance=document.getDouble("balance");
+                                       String userCurrency= document.getString("currency");
+                                       double userBalance=document.getDouble("balance");
 
-                                       //send info of user
+                                       //save and send info of user
+                                       int newUserBalance=(int)userBalance;
                                        SharedPreferences.Editor edit = preset.edit();
-                                       edit.putString("balance",String.valueOf(userBalance));
+                                       edit.putString("balance",String.valueOf(newUserBalance));
                                        edit.putString("name",userName);
                                        edit.putString("lastName",userLastName);
                                        edit.putString("numberPhone",userNumber);
+                                       edit.putString("currency",userCurrency);
                                        edit.commit();
 
                                        Toast.makeText(LoginActivity.this,"Welcome",Toast.LENGTH_SHORT).show();

@@ -33,11 +33,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     //variables                                                                                                     layout
     private TextInputLayout name, lastName, email, password, confirmPassword, numberPhone;                          private TextView textRegister, postBackground;
-    private TextInputEditText inName, inLastName, inEmail, inPassword, inConfirmPassword, inNumberPhone;            private ImageButton buttonBack;     private Button buttonValidate;
+    private TextInputEditText inName, inLastName, inEmail, inPassword, inConfirmPassword, inNumberPhone;            private ImageButton buttonBack;     private Button buttonValidate;     private ScrollView table;
 
     //DataBase Firebase Fire Store
-    private FirebaseFirestore bd;           private final double money= 1000000;                                                                        private ScrollView table;
-    private CollectionReference openBD;
+    private FirebaseFirestore bd;           private final int money= 1000000;
+    private CollectionReference openBD;     private final String currency="peso";
     private FirebaseAuth auth;
     private DocumentReference document;
 
@@ -208,7 +208,6 @@ public class RegisterActivity extends AppCompatActivity {
         buttonValidate.startAnimation(down);
         table.startAnimation(down);
         postBackground.startAnimation(down);
-
     }
 
     //send to bd
@@ -224,6 +223,7 @@ public class RegisterActivity extends AppCompatActivity {
         map.put("password",password);
         map.put("numberPhone",numberPhone);
         map.put("balance",money);
+        map.put("currency",currency);
 
         //in "user" with id personalized, we keep the map and send with "add" to bd
         document.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
