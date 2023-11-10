@@ -1,4 +1,5 @@
 package com.wposs.appkequi;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,7 +17,11 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //variables
     private TextView backgroundBlue, backgroundRed,postBackground, login;  private Button entry, createAccount;
-    private EditText email, password;
+    private TextInputLayout email, password;   private TextInputEditText inEmail, inPassword;
     private TableLayout tableRegister;
 
     //DataBase Firebase
@@ -43,10 +48,12 @@ public class LoginActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
 
-        //layout
+        //View user                                         accessory                                               extras
         email=findViewById(R.id.editTextEmail);             login = findViewById(R.id.textLogin);                   backgroundBlue = findViewById(R.id.azulLg);
         password=findViewById(R.id.editTextPassword);       tableRegister = findViewById(R.id.tableRegister);       backgroundRed = findViewById(R.id.rojoLg);
-        createAccount=findViewById(R.id.buttonCreateAccount);                                                     postBackground= findViewById(R.id.textViewPostBackground);
+        inEmail=findViewById(R.id.inEmail);                                                                         postBackground= findViewById(R.id.textViewPostBackground);
+        inPassword=findViewById(R.id.inPassword);
+        createAccount=findViewById(R.id.buttonCreateAccount);
         entry=findViewById(R.id.buttonEntry);
 
         //dataBase on                               animations
@@ -62,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preset= getSharedPreferences("info", Context.MODE_PRIVATE);
 
             String thisEmail, thisPassword;
-            thisEmail=email.getText().toString();
-            thisPassword=password.getText().toString();
+            thisEmail=inEmail.getText().toString();
+            thisPassword=inPassword.getText().toString();
 
             if(!thisEmail.isEmpty()&&!thisPassword.isEmpty()){
 
@@ -111,7 +118,26 @@ public class LoginActivity extends AppCompatActivity {
                            });
 
                        }else{
-                           Toast.makeText(LoginActivity.this,"Sorry, you are not registered",Toast.LENGTH_SHORT).show();
+                           openBD.whereEqualTo("email",thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                               @Override
+                               public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                   int way=0;
+                                   for(QueryDocumentSnapshot document:queryDocumentSnapshots){
+                                       String userEmail=document.getString("email");
+
+                                       if(!userEmail.isEmpty()&&userEmail!=null){
+                                            way++;
+                                       }else{
+
+                                       }
+                                   }
+                                   if(way!=0){
+                                       Toast.makeText(getApplicationContext(),"Password incorrect",Toast.LENGTH_SHORT).show();
+                                   }else{
+                                       Toast.makeText(getApplicationContext(),"User not found",Toast.LENGTH_SHORT).show();
+                                   }
+                               }
+                           });
                        }
                    }else{
                        Toast.makeText(LoginActivity.this,"error task entry_LoginActivity",Toast.LENGTH_SHORT).show();

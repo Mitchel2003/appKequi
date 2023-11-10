@@ -7,8 +7,6 @@
 
     //LoginActivity
     <string name="textLogin">Login</string>
-    <string name="editTextEmail">Email</string>
-    <string name="textPassword">Password</string>
     <string name="buttonAccept">Entry</string>
     <string name="buttonAccount">or create new account</string>
 

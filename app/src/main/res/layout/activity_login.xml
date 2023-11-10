@@ -106,33 +106,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/editTextEmail"
-                android:inputType="text"
-                android:text="@string/empty"
-                android:textColor="@color/colorT1"
-                android:textColorHint="@color/colorFrom"
-                android:textSize="20sp" />
+                android:layout_marginTop="0dp"
+                android:hint="@string/editEmail"
+                android:textColorHint="@color/background">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/background" />
+            </com.google.android.material.textfield.TextInputLayout>
+
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editTextPassword"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/textPassword"
-                android:inputType="textPassword"
-                android:textColor="@color/colorT1"
-                android:textColorHint="@color/colorFrom"
-                android:textSize="20sp" />
+                android:layout_marginTop="0dp"
+                android:hint="@string/editPassword"
+                android:textColorHint="@color/background"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorFrom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textColor="@color/background" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </TableRow>
 

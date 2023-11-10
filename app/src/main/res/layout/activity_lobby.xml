@@ -259,7 +259,7 @@
                 android:id="@+id/textChangeMoney"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:background="@drawable/background"
+                android:background="@drawable/figura_cuadrado_transparente"
                 android:backgroundTint="@color/buttons"
                 android:fontFamily="@font/andika"
                 android:text="@string/changeMoney"
