@@ -26,7 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -39,7 +41,7 @@ public class LobbyActivity extends AppCompatActivity {
     private CollectionReference openBD;
     private FirebaseAuth auth;
     private DocumentReference document;
-
+//pero como hago para que en el login, al
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +97,23 @@ public class LobbyActivity extends AppCompatActivity {
                     //reset session
                     SharedPreferences preset= getSharedPreferences("info",Context.MODE_PRIVATE);
                     SharedPreferences.Editor edit= preset.edit();
-                    edit.putString("balance","");
-                    edit.putString("name","");
-                    edit.putString("lastName","");
-                    edit.putString("numberPhone","");
+                    String empty="";
+                    edit.putString("balance",empty);
+                    edit.putString("name",empty);
+                    edit.putString("lastName",empty);
+                    edit.putString("numberPhone",empty);
+                    edit.putString("currency",empty);
+                    //compile user
+                    Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
+                    Set<String> newUserCompilation=preset.getStringSet("userEmail",new HashSet<>());
+                    for(String email: userCompilation){
+                        if(email.equals(preset.getString("email",""))){
+                            //nothing
+                        }else{
+                            newUserCompilation.add(email);
+                        }
+                    }
+                    edit.putStringSet("userEmail",newUserCompilation);
                     edit.commit();
 
                     Toast.makeText(getApplicationContext(),"Done",Toast.LENGTH_SHORT).show();
@@ -201,8 +216,6 @@ public class LobbyActivity extends AppCompatActivity {
 
 
 
-
-
     //---------------------------------------ads----------------------------------------------------
     //set currency
     private void updateCurrency(int balance, String currency, String id) {
@@ -229,7 +242,6 @@ public class LobbyActivity extends AppCompatActivity {
             }
         });
     }
-
     //action touchBackground
     public void touchBackground(View see){
         buttonSpawnOptions.setVisibility(View.VISIBLE);
@@ -249,6 +261,7 @@ public class LobbyActivity extends AppCompatActivity {
         },700);
     }
 
+
     //sync data user
     private void updateDataUser(){
         //get info
@@ -260,7 +273,7 @@ public class LobbyActivity extends AppCompatActivity {
 
         updateRadioButton();
     }
-    //set sign currency
+    //sync sign currency
     private String updateSignCurrency(String name){
         if(name.equals("peso")){
             return "$";
@@ -270,7 +283,7 @@ public class LobbyActivity extends AppCompatActivity {
             return "¥";
         }
     }
-    //update radioButton for sync
+    //sync radioButton
     private void updateRadioButton(){
         SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
 

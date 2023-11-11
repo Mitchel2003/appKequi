@@ -209,8 +209,7 @@ public class RegisterActivity extends AppCompatActivity {
         table.startAnimation(down);
         postBackground.startAnimation(down);
     }
-
-    //send to bd
+    //send to FireStore
     private void putDate(String name, String lastName, String email, String password, String numberPhone){
         //create documentReference with bd "user" and a id specific
         document=bd.collection("user").document(numberPhone);

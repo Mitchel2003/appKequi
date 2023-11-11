@@ -2,7 +2,9 @@ package com.wposs.appkequi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         bancolombia=(ImageView) findViewById(R.id.imageViewBancolombia);    rojo2=(TextView) findViewById(R.id.rojo2);
 
         animations();
-
     }
 
 
@@ -80,12 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 kequi.animate().alpha(0).setDuration(1000);
                 azul2.animate().alpha(0).setDuration(1000);
                 rojo2.animate().alpha(0).setDuration(1000);
-
-                Intent go=new Intent(MainActivity.this,LoginActivity.class);
-                startActivity(go);
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                finish();
+                goToLoginActivity();
             }
         },5000);
+    }
+    private void goToLoginActivity(){
+        Intent go=new Intent(MainActivity.this,LoginActivity.class);
+        startActivity(go);
+        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+        finish();
     }
 }
