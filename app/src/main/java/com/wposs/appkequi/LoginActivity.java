@@ -1,6 +1,4 @@
 package com.wposs.appkequi;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -16,15 +14,12 @@ import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity {
@@ -47,7 +43,11 @@ public class LoginActivity extends AppCompatActivity {
     //DataBase Firebase
     private FirebaseFirestore bd;    private CollectionReference openBD;    private DatabaseReference bdReference;
     private FirebaseAuth auth;
-//
+
+    //for recommend the user if not signOff Session
+    private List<AdapterConfig> recommendList;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,13 +67,12 @@ public class LoginActivity extends AppCompatActivity {
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
 
+
         //consult user active
-        email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userConsult();
-            }
-        });
+        userConsult();
+
+        AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
+        email.setAdapter(adapter);
 
     }
 
@@ -86,101 +85,122 @@ public class LoginActivity extends AppCompatActivity {
             thisEmail=email.getText().toString();
             thisPassword=password.getText().toString();
 
-            if(!thisEmail.isEmpty()&&!thisPassword.isEmpty()){
+        if(!thisEmail.isEmpty()&&!thisPassword.isEmpty()){
 
-                openBD.whereEqualTo("email",thisEmail).whereEqualTo("password",thisPassword).get().addOnCompleteListener(task -> {
+            //search email
+            openBD.whereEqualTo("email",thisEmail).get().addOnCompleteListener(task -> {//search this email in BD, and return the validation
+                if(task.isSuccessful()) {//validate sync successfully
+                    QuerySnapshot consultEmail = task.getResult();
 
-                    if (task.isSuccessful()) {
-                        QuerySnapshot consult = task.getResult();
+                    if(consultEmail!=null&&!consultEmail.isEmpty()) {//if is "true" is because thisEmail is equal in to BD
+                        //search password
+                        openBD.whereEqualTo("password",thisPassword).get().addOnCompleteListener(task2 -> {//search this password in BD, and return the validation
+                            if(task2.isSuccessful()) {//sync done
+                                QuerySnapshot consultPassword = task2.getResult();
 
-                        if (consult != null && !consult.isEmpty()) {
+                                if(consultPassword!=null&&!consultPassword.isEmpty()) {//if is "true" is because thisPassword is equal in to BD
 
-                            openBD.whereEqualTo("email", thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    String userName = "", userLastName = "", userNumber = "", userCurrency = "";
-                                    double userBalance = 0;
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                        //getting date of FireStore
-                                        userName = document.getString("name");
-                                        userLastName = document.getString("lastName");
-                                        userNumber = document.getString("numberPhone");
-                                        userCurrency = document.getString("currency");
-                                        userBalance = document.getDouble("balance");
-                                    }
-
-                                    //save and send info of user
-                                    int newUserBalance = (int) userBalance;
-                                    int way = 0;
-                                    SharedPreferences.Editor edit = preset.edit();
-                                    edit.putString("balance", String.valueOf(newUserBalance));
-                                    edit.putString("name", userName);
-                                    edit.putString("lastName", userLastName);
-                                    edit.putString("numberPhone", userNumber);
-                                    edit.putString("currency", userCurrency);
-                                    //compile users
-                                    Set<String> userCompilation = preset.getStringSet("userEmail", new HashSet<>());
-                                    for (String email : userCompilation) {
-                                        if (email.equals(thisEmail)) {
-                                            way++;
-                                        } else {
-                                            //nothing
-                                        }
-                                    }
-
-                                    if (way != 0) {
-                                        userCompilation.add(thisEmail);
-                                        edit.putStringSet("userEmail", userCompilation);
-                                    }
-
-                                    edit.commit();
-
-                                    Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                                    new Handler().postDelayed(new Runnable() {
+                                    //access to account
+                                    openBD.whereEqualTo("email", thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                         @Override
-                                        public void run() {
-                                            Intent go = new Intent(getApplicationContext(), LobbyActivity.class);
-                                            startActivity(go);
-                                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                                            finish();
-                                        }
-                                    }, 1000);
-                                }
-                            });
-                        } else {
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                                            String userName = "", userLastName = "", userNumber = "", userCurrency = "";	double userBalance = 0;
+
+                                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                                //getting date of FireStore
+                                                userName = document.getString("name");
+                                                userLastName = document.getString("lastName");
+                                                userNumber = document.getString("numberPhone");
+                                                userCurrency = document.getString("currency");
+                                                userBalance = document.getDouble("balance");
+                                            }
+
+                                            //save and send info of user
+                                            int newUserBalance = (int) userBalance;
+                                            int way = 0;
+                                            SharedPreferences.Editor edit = preset.edit();
+                                            edit.putString("balance", String.valueOf(newUserBalance));
+                                            edit.putString("name", userName);
+                                            edit.putString("lastName", userLastName);
+                                            edit.putString("numberPhone", userNumber);
+                                            edit.putString("currency", userCurrency);
+
+                                            //compile users
+                                            Set<String> userCompilation = preset.getStringSet("userEmail", new HashSet<>());
+                                            for (String email : userCompilation) {
+                                                if (email.equals(thisEmail)) {
+                                                    way++;
+                                                } else {
+                                                    //nothing
+                                                }
+                                            }
+
+                                            if (way == 0) {
+                                                userCompilation.add(thisEmail);
+                                                edit.putStringSet("userEmail", userCompilation);
+                                            }
+
+                                            edit.commit();
+
+                                            Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+                                            new Handler().postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Intent go = new Intent(getApplicationContext(), LobbyActivity.class);
+                                                    startActivity(go);
+                                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                                    finish();
+                                                }
+                                            }, 1000);
+                                        }
+                                    });
+
+                                }else {
+                                    Toast.makeText(LoginActivity.this, "Password incorrect", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }else {//validate not done
+                                Toast.makeText(LoginActivity.this, "error taskPassword", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }else {
+                        Toast.makeText(LoginActivity.this, "Email not match", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {//validate not successfully
+                    Toast.makeText(LoginActivity.this, "error taskEmail", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }else {
+
+            if (!thisEmail.isEmpty()){
+                openBD.whereEqualTo("email", thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {//QuerySnapshot is for inspect in BD each one of the IDs "user"
+                        int way = 0;
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {//QueryDocumentSnapshot is for inspect varibles in to IDs "name" etc.
+                            String userEmail = document.getString("email");
+
+                            if (!userEmail.isEmpty() && userEmail != null) {
+                                way++;
+                            } else {
+
+                            }
                         }
-                    } else {
-                        Toast.makeText(LoginActivity.this, "error task entry_LoginActivity", Toast.LENGTH_SHORT).show();
+                        if (way != 0) {
+                            Toast.makeText(getApplicationContext(), "Password incorrect, complete the field", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
-            }else {
-                String getEmail=email.getText().toString();
-                if (!getEmail.equals("")){
-                    openBD.whereEqualTo("email", thisEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            int way = 0;
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                String userEmail = document.getString("email");
-
-                                if (!userEmail.isEmpty() && userEmail != null) {
-                                    way++;
-                                } else {
-
-                                }
-                            }
-                            if (way != 0) {
-                                Toast.makeText(getApplicationContext(), "Password incorrect", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "User not found", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }else{
-                    Toast.makeText(this,"Enter the fields",Toast.LENGTH_SHORT).show();
-                }
+            }else{
+                Toast.makeText(this,"Enter the fields",Toast.LENGTH_SHORT).show();
             }
+        }
     }
 
 
@@ -244,40 +264,53 @@ public class LoginActivity extends AppCompatActivity {
     private void userConsult(){
         SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
         Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
+        //confirm data
+        int value=userCompilation.size();
 
-        if(!preset.getStringSet("userEmail",new HashSet<>()).isEmpty()&&preset.getStringSet("userEmail",new HashSet<>())!=null){
+        if(value!=0){
             //save user
-            String list[]=new String[userCompilation.size()];
+            String listUser[]=new String[value];
 
-            for(String email:userCompilation){
-                int num=0;
-                list[num]=email;
+            int num=0;
+
+            for(String email:userCompilation){//insert in to arrayList
+                userSuggest(email);//
+                listUser[num]=email;
                 num++;
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+            //if(num!=0) {
+                //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, listUser);
 
-            //keep and view in to AutoCompleteTextView
-            email.setAdapter(adapter);
+                //keep and view in to AutoCompleteTextView
+                //email.setAdapter(adapter);
 
-            //interaction
-            email.setOnItemClickListener((parent, view, position, id) -> {
-                String userEmail=(String) parent.getItemAtPosition(position);
+                //interaction
+                //email.setOnItemClickListener((parent, view, position, id) -> {
+                    //String userEmail = (String) parent.getItemAtPosition(position);
 
-                openBD.whereEqualTo("email",userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for(QueryDocumentSnapshot document: queryDocumentSnapshots){
-                            String userPassword= document.getString("password");
+                    //openBD.whereEqualTo("email", userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        //@Override
+                        //public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            //for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                //String userPassword = document.getString("password");
 
-                            password.setText(userPassword);
-                        }
-                    }
-                });
-            });
-        }else{
-            //userEmail empty
+                                //password.setText(userPassword);
+                            //}
+                        //}
+                    //});
+                //});
+            //}
+
+
+        }else{//userEmail empty
+
         }
 
+    }
+
+    private void userSuggest(String user){
+        recommendList=new ArrayList<>();
+        recommendList.add(new AdapterConfig(user));
     }
 }

@@ -118,9 +118,15 @@
                     android:id="@+id/inEmail"
                     android:layout_width="match_parent"
                     android:layout_height="68dp"
-                    android:completionThreshold="1"
-                    android:fontFamily="@font/andika"
                     android:inputType="textEmailAddress"
+                    android:completionThreshold="1"
+
+                    android:dropDownHeight="wrap_content"
+                    android:dropDownWidth="match_parent"
+                    android:popupBackground="@color/colorT2"
+                    android:backgroundTint="@color/colorT3"
+
+                    android:fontFamily="@font/andika"
                     android:paddingLeft="15dp"
                     android:textColor="@color/background"
                     android:textSize="18sp" />

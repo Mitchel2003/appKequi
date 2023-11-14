@@ -31,10 +31,10 @@
     <string name="textBalance">Your balance</string>
     <string name="textNumberBalance">---.---</string>
 
-        //change money
-        <string name="moneyPeso">Peso $</string>
-        <string name="moneyEuro">Euro €</string>
-        <string name="moneyYen">Yen ¥</string>
+    //change money
+    <string name="moneyPeso">Peso $</string>
+    <string name="moneyEuro">Euro €</string>
+    <string name="moneyYen">Yen ¥</string>
 
 
 </resources>
