@@ -41,6 +41,14 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/anim_wallet" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="369dp"
+        android:layout_height="222dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/rojoLg"
         android:layout_width="338dp"
@@ -117,60 +125,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textBalance"
         app:layout_constraintVertical_bias="0.0" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginBottom="170dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <LinearLayout
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/empty"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textEnunciado2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/andika"
-                android:text="@string/textEnunciado2"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textEmpty2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/empty"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textEnunciado3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/andika"
-                android:text="@string/textEnunciado3"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-    </ScrollView>
 
     <ImageButton
         android:id="@+id/buttonOptions"

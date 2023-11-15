@@ -51,7 +51,7 @@ public class TransferActivity extends AppCompatActivity {
         auth=FirebaseAuth.getInstance();//authentication
     }
 
-    //first funtion
+    //first function
     public void actionSendCash(View see) {
         SharedPreferences preset=getSharedPreferences("info", Context.MODE_PRIVATE);
 
@@ -100,11 +100,154 @@ public class TransferActivity extends AppCompatActivity {
                                     QuerySnapshot consult2=task2.getResult();
 
                                     if(consult2!=null&&!consult2.isEmpty()) {//is exist
+                                        final int newId[]=new int[1];
+                                        DocumentReference documentInitial,thisDocument;
+                                        documentInitial=openBDHistory.document(thisNumberPhone);//in history_numberPhone
+
+                                        openBDHistory.whereEqualTo(thisNumberPhone, thisNumberPhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            int id=0;
+
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                for(QueryDocumentSnapshot history:queryDocumentSnapshots){
+                                                    if(history!=null){
+                                                        id++;
+                                                    }
+                                                }
+                                            newId[0]=id;
+                                            }
+                                        });
+
+                                        //this for obtain the number id, and can ++
+                                        int id=newId[0];
+                                        String idUnit=String.valueOf(id+1);
+
+                                        CollectionReference openSubFolder= documentInitial.collection(thisNumberPhone);//access to reference that need
+                                        thisDocument=openSubFolder.document(idUnit);
+
+                                        //create a map for compilation of values
+                                        Map<String, Object> map= new HashMap<>();
+                                        map.put("nameUserSend",thisName);
+                                        map.put("numberPhoneUserSend",thisNumberPhone);
+                                        map.put("nameUserReceive",otherName[0]);
+                                        map.put("numberPhoneUserReceive",writePhone);
+                                        map.put("cashSend",sendBalance);
+                                        map.put("messageSend",writeMessage);
+                                        map.put("status","send");
+
+                                        thisDocument.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override                                                                                                             	//    @Override
+                                            public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
+                                                Toast.makeText(getApplicationContext(),"history this_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
+                                            }                                                                                                                     	//    }
+                                        }).addOnFailureListener(new OnFailureListener() {                                                                         	//}).addOnFailureListener(new OnFailureListener() {
+                                            @Override                                                                                                             	//    @Override
+                                            public void onFailure(@NonNull Exception e) {//if failed                                                              	//    public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(),"Work not completed (history this_add)",Toast.LENGTH_SHORT).show();                 				//        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
+                                            }                                                                                                                     	//    }
+                                        });
+
+                                        //now user that receive
+                                        openBDHistory.whereEqualTo(writePhone,writePhone).get().addOnCompleteListener(task3 -> {
+
+                                            if(task3.isSuccessful()) {//validation successfully
+                                                QuerySnapshot consult3=task3.getResult();
+
+                                                if(consult3!=null&&!consult3.isEmpty()) {//is exist
+                                                    final int newIdOther[]=new int[1];
+
+                                                    DocumentReference documentInitialOther,otherDocument;
+                                                    documentInitialOther=openBDHistory.document(writePhone);//in history_numberPhone
+
+                                                    openBDHistory.whereEqualTo(writePhone, writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        int id=0;
+
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for(QueryDocumentSnapshot history:queryDocumentSnapshots){
+                                                                if(history!=null){
+                                                                    id++;
+                                                                }
+                                                            }
+                                                            newIdOther[0]=id;
+                                                        }
+                                                    });
+
+                                                    //this for obtain the number id, and can ++
+                                                    int idOther=newIdOther[0];
+                                                    String idUnitOther=String.valueOf(idOther+1);
+
+                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference that need
+                                                    otherDocument=openSubFolderOther.document(idUnitOther);
+
+                                                    //create a map for compilation of values
+                                                    Map<String, Object> otherMap= new HashMap<>();
+                                                    otherMap.put("nameUserSend",thisName);
+                                                    otherMap.put("numberPhoneUserSend",thisNumberPhone);
+                                                    otherMap.put("nameUserReceive",otherName[0]);
+                                                    otherMap.put("numberPhoneUserReceive",writePhone);
+                                                    otherMap.put("cashReceive",sendBalance);
+                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("status","receive");
+
+                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override                                                                                                             	//    @Override
+                                                        public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
+                                                            Toast.makeText(getApplicationContext(),"history other_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     	//    }
+                                                    }).addOnFailureListener(new OnFailureListener() {                                                                         	//}).addOnFailureListener(new OnFailureListener() {
+                                                        @Override                                                                                                             	//    @Override
+                                                        public void onFailure(@NonNull Exception e) {//if failed                                                              	//    public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getApplicationContext(),"Work not completed (history other_add)",Toast.LENGTH_SHORT).show();                 				//        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     	//    }
+                                                    });
+
+
+                                                }else {//not exist "create"
+
+                                                    String idOther="1";
+
+                                                    //this is equals a say "document=bd.collection("history").document(thisNumberPhone).document(id);"
+                                                    DocumentReference documentInitialOther, otherDocument;
+                                                    documentInitialOther=openBDHistory.document(writePhone);//create history_numberPhone
+
+                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference
+                                                    otherDocument=openSubFolderOther.document(idOther);//create in numberPhone the folder id "001" (history)
+
+                                                    //create a map for compilation of values
+                                                    Map<String, Object> otherMap= new HashMap<>();
+                                                    otherMap.put("nameUserSend",thisName);
+                                                    otherMap.put("numberPhoneUserSend",thisNumberPhone);
+                                                    otherMap.put("nameUserReceive",otherName[0]);
+                                                    otherMap.put("numberPhoneUserReceive",writePhone);
+                                                    otherMap.put("cashReceiver",sendBalance);
+                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("status","receive");
+
+                                                    //in "history" "numberPhone" "id(1)" we keep the map and send with "add" to bd
+                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override                                                                                                             //    @Override
+                                                        public void onSuccess(Void unused) {//if completed                                                                    //    public void onSuccess(DocumentReference documentReference) {
+                                                            Toast.makeText(getApplicationContext(),"create other history completed",Toast.LENGTH_SHORT).show();            //        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     //    }
+                                                    }).addOnFailureListener(new OnFailureListener() {                                                                         //}).addOnFailureListener(new OnFailureListener() {
+                                                        @Override                                                                                                             //    @Override
+                                                        public void onFailure(@NonNull Exception e) {//if failed                                                              //    public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getApplicationContext(),"error create other history",Toast.LENGTH_SHORT).show();                 //        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     //    }
+                                                    });
+                                                }
+
+                                            }else {//not validate
+                                                Toast.makeText(getApplicationContext(), "error taskOtherNumberPhone", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        });
 
 
 
                                     }else {//not exist "create"
-                                        String id = "001";
+                                        String id = "1";
 
                                         //this is equals a say "document=bd.collection("history").document(thisNumberPhone).document(id);"
                                         DocumentReference documentInitial,thisDocument;
@@ -144,8 +287,53 @@ public class TransferActivity extends AppCompatActivity {
                                                 QuerySnapshot consult3=task3.getResult();
 
                                                 if(consult3!=null&&!consult3.isEmpty()) {//is exist
+                                                    final int newIdOther[]=new int[1];
 
+                                                    DocumentReference documentInitialOther,otherDocument;
+                                                    documentInitialOther=openBDHistory.document(writePhone);//in history_numberPhone
 
+                                                    openBDHistory.whereEqualTo(writePhone, writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        int id=0;
+
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            for(QueryDocumentSnapshot history:queryDocumentSnapshots){
+                                                                if(history!=null){
+                                                                    id++;
+                                                                }
+                                                            }
+                                                            newIdOther[0]=id;
+                                                        }
+                                                    });
+
+                                                    //this for obtain the number id, and can ++
+                                                    int idOther=newIdOther[0];
+                                                    String idUnitOther=String.valueOf(idOther+1);
+
+                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference that need
+                                                    otherDocument=openSubFolderOther.document(idUnitOther);
+
+                                                    //create a map for compilation of values
+                                                    Map<String, Object> otherMap= new HashMap<>();
+                                                    otherMap.put("nameUserSend",thisName);
+                                                    otherMap.put("numberPhoneUserSend",thisNumberPhone);
+                                                    otherMap.put("nameUserReceive",otherName[0]);
+                                                    otherMap.put("numberPhoneUserReceive",writePhone);
+                                                    otherMap.put("cashReceive",sendBalance);
+                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("status","receive");
+
+                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override                                                                                                             	//    @Override
+                                                        public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
+                                                            Toast.makeText(getApplicationContext(),"history other_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     	//    }
+                                                    }).addOnFailureListener(new OnFailureListener() {                                                                         	//}).addOnFailureListener(new OnFailureListener() {
+                                                        @Override                                                                                                             	//    @Override
+                                                        public void onFailure(@NonNull Exception e) {//if failed                                                              	//    public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getApplicationContext(),"Work not completed (history other_add)",Toast.LENGTH_SHORT).show();                 				//        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
+                                                        }                                                                                                                     	//    }
+                                                    });
 
                                                 }else {//not exist "create"
 
@@ -189,6 +377,7 @@ public class TransferActivity extends AppCompatActivity {
 
 
 
+
                                 }else {//validation not successfully
                                     Toast.makeText(getApplicationContext(), "error taskThisNumberPhone", Toast.LENGTH_SHORT).show();
                                 }
@@ -212,6 +401,7 @@ public class TransferActivity extends AppCompatActivity {
         }else {//enter the fields "empty fields"
             Toast.makeText(this,"Enter the fields",Toast.LENGTH_SHORT).show();
         }
+
 
     }
 

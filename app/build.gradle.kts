@@ -56,4 +56,9 @@ dependencies {
 
     //implements lottie
     implementation("com.airbnb.android:lottie:6.1.0")
+
+    //Recycler view
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.cardview:cardview:1.0.0")
+
 }

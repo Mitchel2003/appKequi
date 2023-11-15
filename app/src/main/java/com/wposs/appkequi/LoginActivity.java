@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -47,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     //for recommend the user if not signOff Session
     private List<AdapterConfig> recommendList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +69,38 @@ public class LoginActivity extends AppCompatActivity {
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
 
+        //get info
+        SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
+        Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
 
-        //consult user active
-        userConsult();
+        if(!userCompilation.isEmpty()&&userCompilation!=null){
+            //fill the recommendList with each user
+            userConsult();
 
-        AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
-        email.setAdapter(adapter);
+            AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
+            email.setAdapter(adapter);
+            email.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String email=adapter.getUserEmail();
+
+                    openBD.whereEqualTo("email",email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                //getting date password of FireStore
+                                String userPassword = document.getString("password");
+
+                                password.setText(userPassword);
+                            }
+                        }
+
+                    });
+                    Toast.makeText(getApplicationContext(),"Wait a moment",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     }
 
@@ -142,6 +170,12 @@ public class LoginActivity extends AppCompatActivity {
                                             }
 
                                             edit.commit();
+
+                                            //reset the recommendList "for LobbyActivity" working...
+                                            if(!recommendList.isEmpty()){
+                                                recommendList.clear();
+                                            }
+
 
                                             Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
                                             new Handler().postDelayed(new Runnable() {
@@ -261,22 +295,16 @@ public class LoginActivity extends AppCompatActivity {
         }, 10000);
     }
 
-    private void userConsult(){
+    private void userConsult()/*this for get users "don´t has been sign off" through SharedPreferences */{
         SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
         Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
         //confirm data
         int value=userCompilation.size();
 
         if(value!=0){
-            //save user
-            String listUser[]=new String[value];
-
-            int num=0;
 
             for(String email:userCompilation){//insert in to arrayList
-                userSuggest(email);//
-                listUser[num]=email;
-                num++;
+                userSuggest(email);
             }
 
             //if(num!=0) {
@@ -303,14 +331,20 @@ public class LoginActivity extends AppCompatActivity {
             //}
 
 
-        }else{//userEmail empty
-
         }
-
     }
 
-    private void userSuggest(String user){
+    private void userSuggest(String user)/*this for initializing each user with adapterConfig "new", add a category in the adapter*/{
         recommendList=new ArrayList<>();
         recommendList.add(new AdapterConfig(user));
+    }
+
+    //--------------------------------------setter and getters--------------------------------------
+    // recommendList
+    public void setRecommendList(List<AdapterConfig> newList){
+        this.recommendList=newList;
+    }
+    public List<AdapterConfig> getRecommendList(){
+        return recommendList;
     }
 }

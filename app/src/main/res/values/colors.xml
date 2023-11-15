@@ -17,6 +17,7 @@
     <color name="rojo">#60FF0059</color>
 
     //colors transparent
+    <color name="verdeBackground">#2026FF00</color>
     <color name="azulBackground">#2000C2FF</color>
     <color name="rojoBackground">#20FF0059</color>
     <color name="buttons">#307700FF</color>

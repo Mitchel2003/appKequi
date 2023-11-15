@@ -3,6 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/alice</item>
         <item>@font/andika</item>
+        <item>@font/anonymous_pro_bold</item>
         <item>@font/bad_script</item>
     </array>
 </resources>

@@ -1,22 +1,36 @@
 package com.wposs.appkequi;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.SuccessContinuation;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AutoCompleteAdapter extends ArrayAdapter<AdapterConfig>{
 
     private List<AdapterConfig> recommendListFull;
-
+    private String userEmail;
     public AutoCompleteAdapter(@NonNull Context context, @NonNull List<AdapterConfig> recommendList) {
         super(context, 0, recommendList);
         recommendListFull=new ArrayList<>(recommendList);
@@ -42,10 +56,20 @@ public class AutoCompleteAdapter extends ArrayAdapter<AdapterConfig>{
         AdapterConfig user=getItem(position);
 
         if(user!=null){
+
             email.setText(user.getEmail());
+            updateEmail(user.getEmail());
+
         }
 
         return convertView;
+    }
+
+    public void updateEmail(String email){
+        this.userEmail=email;
+    }
+    public String getUserEmail(){
+        return userEmail;
     }
 
     private Filter filter=new Filter() {
@@ -66,6 +90,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<AdapterConfig>{
                         viewSuggest.add(user);
                     }
                 }
+
             }
 
             results.values=viewSuggest;

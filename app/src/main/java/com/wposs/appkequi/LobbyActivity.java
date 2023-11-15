@@ -22,11 +22,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,10 +43,13 @@ public class LobbyActivity extends AppCompatActivity {
 
     //DataBase Firebase Fire Store
     private FirebaseFirestore bd;
-    private CollectionReference openBD;
+    private CollectionReference openBDUser, openBDHistory;
     private FirebaseAuth auth;
     private DocumentReference document;
-//pero como hago para que en el login, al
+
+    //for adapterRecyclerView
+    private List<AdapterRecyclerView> elements;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,9 +66,11 @@ public class LobbyActivity extends AppCompatActivity {
 
         //FireStore on
         bd=FirebaseFirestore.getInstance();
-        openBD=bd.collection("user");
+        openBDUser=bd.collection("user");
+        openBDHistory=bd.collection("history");
         auth=FirebaseAuth.getInstance();
 
+        history();
         updateDataUser();
     }
 
@@ -295,5 +305,73 @@ public class LobbyActivity extends AppCompatActivity {
         }else{
             yen.setChecked(true);
         }
+    }
+
+
+    private void history() {
+        SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
+        String numberPhone= preset.getString("numberPhone","");
+
+        openBDHistory.whereEqualTo(numberPhone,numberPhone).get().addOnCompleteListener(task -> {//search this email in BD, and return the validation
+            if (task.isSuccessful()) {//validate sync successfully
+                QuerySnapshot consultNumber = task.getResult();
+
+                if(consultNumber!=null&&!consultNumber.isEmpty()){//found
+
+                    DocumentReference documentInitial, document;
+                    documentInitial=openBDHistory.document(numberPhone);//initialize
+
+                    documentInitial.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            final int newId[]=new int[1];
+                            DocumentReference documentInitial,thisDocument;
+                            documentInitial=openBDHistory.document(numberPhone);//in history_numberPhone
+
+                            openBDHistory.whereEqualTo(numberPhone, numberPhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                int id=0;
+
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for(QueryDocumentSnapshot history:queryDocumentSnapshots){
+                                        if(history!=null){
+                                            id++;
+                                        }
+                                    }
+                                    newId[0]=id;
+                                }
+                            });
+
+                            int cont=newId[0];
+
+                            for(int i=0;i<cont;i++){
+                                String status=documentSnapshot.getString("status");
+                                String nameSend=documentSnapshot.getString("nameUserSend");
+                                String nameReceive=documentSnapshot.getString("nameUserReceive");
+                                String numberSend=documentSnapshot.getString("numberPhoneUserSend");
+                                String cashSend=documentSnapshot.getString("cashSend");
+                                //variables to receive and send; config please. 1 is because send and other is because receive
+                            }
+                        }
+                    });
+
+                }else{//not found
+
+                }
+
+            }else{//task not successfully
+
+            }
+        });
+
+
+
+    }
+
+
+    public void newElement(){
+        elements=new ArrayList<>();
+        //elements.add(new recyclerView());
     }
 }
