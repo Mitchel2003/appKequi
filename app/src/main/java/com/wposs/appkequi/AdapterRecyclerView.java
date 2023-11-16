@@ -32,7 +32,6 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
     @Override
     public AdapterRecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View see=inflater.inflate(R.layout.list_recycler_lobby,null);
-
         return new AdapterRecyclerView.ViewHolder(see);
     }
 
@@ -66,7 +65,6 @@ public class AdapterRecyclerView extends RecyclerView.Adapter<AdapterRecyclerVie
             cash.setText(item.getCash());
             message.setText(item.getMessage());
             status.setText(item.getStatus());
-
         }
 
     }

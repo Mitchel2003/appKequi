@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:backgroundTint="@color/background"
+    android:contentDescription="go to send cash"
     tools:context=".LobbyActivity">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -41,13 +42,34 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/anim_wallet" />
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/buttonSend"
+        android:layout_width="168dp"
+        android:layout_height="125dp"
+        android:contentDescription="go to send money"
+        android:onClick="goToTransfer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.207"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/anim_send" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="369dp"
-        android:layout_height="222dp"
+        android:id="@+id/listRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonSend" />
 
     <TextView
         android:id="@+id/rojoLg"

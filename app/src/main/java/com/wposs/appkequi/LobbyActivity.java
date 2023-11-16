@@ -2,6 +2,8 @@ package com.wposs.appkequi;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +52,7 @@ public class LobbyActivity extends AppCompatActivity {
     private DocumentReference document;
 
     //for adapterRecyclerView
-    private List<AdapterRecyclerView> elements;
+    private List<recyclerView> elements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +227,13 @@ public class LobbyActivity extends AppCompatActivity {
             });
         }
     }
+    //goToTransfer
+    public void goToTransfer(View see){
+        Intent go = new Intent(getApplicationContext(), TransferActivity.class);
+        startActivity(go);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
 
 
 
@@ -318,7 +329,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                 if(consultNumber!=null&&!consultNumber.isEmpty()){//found
 
-                    DocumentReference documentInitial, document;
+                    DocumentReference documentInitial;
                     documentInitial=openBDHistory.document(numberPhone);//initialize
 
                     documentInitial.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -326,16 +337,16 @@ public class LobbyActivity extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                             final int newId[]=new int[1];
-                            DocumentReference documentInitial,thisDocument;
+                            DocumentReference documentInitial;
                             documentInitial=openBDHistory.document(numberPhone);//in history_numberPhone
 
-                            openBDHistory.whereEqualTo(numberPhone, numberPhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            openBDHistory.whereEqualTo(numberPhone, numberPhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {//get number of elements in to this user(idNumberPhone)
                                 int id=0;
 
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     for(QueryDocumentSnapshot history:queryDocumentSnapshots){
-                                        if(history!=null){
+                                        if(history.get("status")!=null){
                                             id++;
                                         }
                                     }
@@ -345,14 +356,25 @@ public class LobbyActivity extends AppCompatActivity {
 
                             int cont=newId[0];
 
+                                    String nameSend="",numberPhoneSend="",nameReceive="",numberPhoneReceive="",numberSend="",cash="",message="",status="";
+                                    String colorGreen="#2026FF00";
                             for(int i=0;i<cont;i++){
-                                String status=documentSnapshot.getString("status");
-                                String nameSend=documentSnapshot.getString("nameUserSend");
-                                String nameReceive=documentSnapshot.getString("nameUserReceive");
-                                String numberSend=documentSnapshot.getString("numberPhoneUserSend");
-                                String cashSend=documentSnapshot.getString("cashSend");
-                                //variables to receive and send; config please. 1 is because send and other is because receive
+                                nameSend=documentSnapshot.getString("nameUserSend");
+                                numberPhoneSend=documentSnapshot.getString("numberPhoneUserSend");
+                                nameReceive=documentSnapshot.getString("nameUserReceive");
+                                numberPhoneReceive=documentSnapshot.getString("numberPhoneUserSend");
+                                numberSend=documentSnapshot.getString("numberPhoneUserSend");
+                                cash=documentSnapshot.getString("cash");
+                                message=documentSnapshot.getString("message");
+                                status=documentSnapshot.getString("status");
                             }
+                            newElement(colorGreen,nameSend,numberPhoneSend,cash,message,status);
+
+                            AdapterRecyclerView list=new AdapterRecyclerView(elements,getApplicationContext());
+                            RecyclerView view=findViewById(R.id.listRecyclerView);
+                            view.setHasFixedSize(true);
+                            view.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                            view.setAdapter(list);
                         }
                     });
 
@@ -367,11 +389,14 @@ public class LobbyActivity extends AppCompatActivity {
 
 
 
+
     }
 
 
-    public void newElement(){
+    public void newElement(String color, String name, String numberPhone, String cash, String message, String status){
         elements=new ArrayList<>();
-        //elements.add(new recyclerView());
+        elements.add(new recyclerView(color,name,numberPhone,cash,message,status));
+
+
     }
 }

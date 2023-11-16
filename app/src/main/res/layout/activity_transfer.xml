@@ -4,17 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:backgroundTint="@color/background"
     tools:context=".TransferActivity">
 
     <TextView
-        android:id="@+id/textTitle"
+        android:id="@+id/textStatement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="17dp"
-        android:text="@string/options"
-        android:textSize="20sp"
+        android:fontFamily="@font/andika"
+        android:text="@string/textStatement"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.062" />
 
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editNumberPhoneSend"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="279dp"
+        android:layout_height="74dp"
+        android:hint="@string/editNumberPhone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inEditNumberPhoneSend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editCashSend"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="279dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/editCash"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editNumberPhoneSend">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inEditCashSend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editMessageSend"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="279dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/editMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCashSend">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inEditMessageSend"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="actionSendCash"
+        android:text="@string/buttonSend"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editMessageSend"
+        app:layout_constraintVertical_bias="0.154" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="101dp"
+        android:layout_height="82dp"
+        android:background="@drawable/background"
+        android:backgroundTint="@color/background"
+        android:contentDescription="back"
+        android:onClick="backToLobby"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.003"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.003"
+        app:srcCompat="@drawable/icon_atras" />
 </androidx.constraintlayout.widget.ConstraintLayout>

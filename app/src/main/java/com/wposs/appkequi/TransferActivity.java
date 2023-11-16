@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -42,6 +43,10 @@ public class TransferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transfer);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
+
+        phoneSend=findViewById(R.id.inEditNumberPhoneSend);
+        cashSend=findViewById(R.id.inEditCashSend);
+        messageSend=findViewById(R.id.inEditMessageSend);
 
         //dataBase on
         bd= FirebaseFirestore.getInstance();
@@ -91,7 +96,7 @@ public class TransferActivity extends AppCompatActivity {
 
                         if(sendBalance<=thisBalance) {//credits valid
 
-                            //need create history for this and the other user
+                            /*------------------------need create history for this and the other user----------------------*/
 
                             //first user that send
                             openBDHistory.whereEqualTo(thisNumberPhone,thisNumberPhone).get().addOnCompleteListener(task2 -> {
@@ -131,8 +136,8 @@ public class TransferActivity extends AppCompatActivity {
                                         map.put("numberPhoneUserSend",thisNumberPhone);
                                         map.put("nameUserReceive",otherName[0]);
                                         map.put("numberPhoneUserReceive",writePhone);
-                                        map.put("cashSend",sendBalance);
-                                        map.put("messageSend",writeMessage);
+                                        map.put("cash",sendBalance);
+                                        map.put("message",writeMessage);
                                         map.put("status","send");
 
                                         thisDocument.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -186,8 +191,8 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("numberPhoneUserSend",thisNumberPhone);
                                                     otherMap.put("nameUserReceive",otherName[0]);
                                                     otherMap.put("numberPhoneUserReceive",writePhone);
-                                                    otherMap.put("cashReceive",sendBalance);
-                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("cash",sendBalance);
+                                                    otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
                                                     otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -220,8 +225,8 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("numberPhoneUserSend",thisNumberPhone);
                                                     otherMap.put("nameUserReceive",otherName[0]);
                                                     otherMap.put("numberPhoneUserReceive",writePhone);
-                                                    otherMap.put("cashReceiver",sendBalance);
-                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("cash",sendBalance);
+                                                    otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
                                                     //in "history" "numberPhone" "id(1)" we keep the map and send with "add" to bd
@@ -246,15 +251,12 @@ public class TransferActivity extends AppCompatActivity {
 
 
 
-                                    }else {//not exist "create"
+                                    }else {//not exist "create"      //this changed for test
                                         String id = "1";
 
-                                        //this is equals a say "document=bd.collection("history").document(thisNumberPhone).document(id);"
-                                        DocumentReference documentInitial,thisDocument;
-                                        documentInitial=openBDHistory.document(thisNumberPhone);//create history_numberPhone
-
-                                        CollectionReference openSubFolder= documentInitial.collection(thisNumberPhone);//access to reference
-                                        thisDocument=openSubFolder.document(id);//create in numberPhone the folder id "001" (history)
+                                        DocumentReference documentInitial=openBDHistory.document("history");
+                                        CollectionReference thisCollection=documentInitial.collection(thisNumberPhone);
+                                        DocumentReference thisDocument=thisCollection.document(id);//create in numberPhone the folder id "001" (history)
 
                                         //create a map for compilation of values
                                         Map<String, Object> map= new HashMap<>();
@@ -262,8 +264,8 @@ public class TransferActivity extends AppCompatActivity {
                                         map.put("numberPhoneUserSend",thisNumberPhone);
                                         map.put("nameUserReceive",otherName[0]);
                                         map.put("numberPhoneUserReceive",writePhone);
-                                        map.put("cashSend",sendBalance);
-                                        map.put("messageSend",writeMessage);
+                                        map.put("cash",sendBalance);
+                                        map.put("message",writeMessage);
                                         map.put("status","send");
 
                                         //in "history" with id personalized, we keep the map and send with "add" to bd
@@ -319,8 +321,8 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("numberPhoneUserSend",thisNumberPhone);
                                                     otherMap.put("nameUserReceive",otherName[0]);
                                                     otherMap.put("numberPhoneUserReceive",writePhone);
-                                                    otherMap.put("cashReceive",sendBalance);
-                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("cash",sendBalance);
+                                                    otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
                                                     otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -350,8 +352,8 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("numberPhoneUserSend",thisNumberPhone);
                                                     otherMap.put("nameUserReceive",otherName[0]);
                                                     otherMap.put("numberPhoneUserReceive",writePhone);
-                                                    otherMap.put("cashReceiver",sendBalance);
-                                                    otherMap.put("messageReceive",writeMessage);
+                                                    otherMap.put("cash",sendBalance);
+                                                    otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
                                                     //in "history" "numberPhone" "id(001)" we keep the map and send with "add" to bd
@@ -403,6 +405,13 @@ public class TransferActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void backToLobby(View see){
+        Intent go = new Intent(getApplicationContext(), LobbyActivity.class);
+        startActivity(go);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
 

@@ -36,5 +36,11 @@
     <string name="moneyEuro">Euro €</string>
     <string name="moneyYen">Yen ¥</string>
 
+    //TransferActivity
+    <string name="textStatement">Send</string>
+    <string name="editNumberPhone">Number phone to send</string>
+    <string name="editCash">Amount of cash</string>
+    <string name="editMessage">Write your message</string>
+    <string name="buttonSend">send cash</string>
 
 </resources>

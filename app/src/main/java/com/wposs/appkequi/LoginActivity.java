@@ -69,13 +69,9 @@ public class LoginActivity extends AppCompatActivity {
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
 
-        //get info
-        SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
-        Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
+        userConsult();
 
-        if(!userCompilation.isEmpty()&&userCompilation!=null){
-            //fill the recommendList with each user
-            userConsult();
+        if(userConsult()!=0){
 
             AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
             email.setAdapter(adapter);
@@ -103,6 +99,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+
+
 
     //buttons login
     public void entry(View see){
@@ -172,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                                             edit.commit();
 
                                             //reset the recommendList "for LobbyActivity" working...
-                                            if(!recommendList.isEmpty()){
+                                            if(!recommendList.isEmpty()&&recommendList!=null){
                                                 recommendList.clear();
                                             }
 
@@ -295,7 +294,7 @@ public class LoginActivity extends AppCompatActivity {
         }, 10000);
     }
 
-    private void userConsult()/*this for get users "don´t has been sign off" through SharedPreferences */{
+    private int userConsult()/*this for get users "don´t has been sign off" through SharedPreferences */{
         SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
         Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
         //confirm data
@@ -307,31 +306,9 @@ public class LoginActivity extends AppCompatActivity {
                 userSuggest(email);
             }
 
-            //if(num!=0) {
-                //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, listUser);
-
-                //keep and view in to AutoCompleteTextView
-                //email.setAdapter(adapter);
-
-                //interaction
-                //email.setOnItemClickListener((parent, view, position, id) -> {
-                    //String userEmail = (String) parent.getItemAtPosition(position);
-
-                    //openBD.whereEqualTo("email", userEmail).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        //@Override
-                        //public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            //for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                //String userPassword = document.getString("password");
-
-                                //password.setText(userPassword);
-                            //}
-                        //}
-                    //});
-                //});
-            //}
-
-
         }
+
+        return value;
     }
 
     private void userSuggest(String user)/*this for initializing each user with adapterConfig "new", add a category in the adapter*/{
@@ -340,11 +317,4 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //--------------------------------------setter and getters--------------------------------------
-    // recommendList
-    public void setRecommendList(List<AdapterConfig> newList){
-        this.recommendList=newList;
-    }
-    public List<AdapterConfig> getRecommendList(){
-        return recommendList;
-    }
 }
