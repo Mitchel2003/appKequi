@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -32,10 +33,11 @@ public class TransferActivity extends AppCompatActivity {
 
     //DataBase Firebase
     private FirebaseFirestore bd;
-    private CollectionReference openBDUser, openBDHistory;
+    private CollectionReference openBD, openBDThisUser, openBDOtherUser;
     private DocumentReference document;
     private DatabaseReference bdReference;
     private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +52,10 @@ public class TransferActivity extends AppCompatActivity {
 
         //dataBase on
         bd= FirebaseFirestore.getInstance();
-        openBDUser=bd.collection("user");
-        openBDHistory=bd.collection("history");
+        openBD=bd.collection("user");
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
+
     }
 
     //first function
@@ -64,9 +66,13 @@ public class TransferActivity extends AppCompatActivity {
         String writeCash=cashSend.getText().toString();
         String writeMessage=messageSend.getText().toString();
 
+        openBDThisUser=openBD.document(preset.getString("numberPhone","")).collection("history");
+        openBDOtherUser=openBD.document(writePhone).collection("history");
+        //openBDOtherUser=bd.document("user").collection(writePhone);
+
         if(!writePhone.isEmpty()&&!writeCash.isEmpty()&&!writeMessage.isEmpty()){
 
-            openBDUser.whereEqualTo("numberPhone",writePhone).get().addOnCompleteListener(task -> {
+            openBD.whereEqualTo("numberPhone",writePhone).get().addOnCompleteListener(task -> {
 
                 if(task.isSuccessful()) {
                     QuerySnapshot consult=task.getResult();
@@ -74,61 +80,62 @@ public class TransferActivity extends AppCompatActivity {
                     if(consult!=null&&!consult.isEmpty()) {//exist
 
                         //consult data of the user that receive
-                        final String [] otherName=new String[1];
+                        final String[] otherName = new String[1];
 
-                        openBDUser.whereEqualTo("numberPhone",writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                        openBD.whereEqualTo("numberPhone", writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                                for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                     //getting date of FireStore
                                     otherName[0] = document.getString("name");
                                 }
                             }
                         });
 
-                        //consult credits of the user that send
-                        String thisName=preset.getString("name","");
-                        String thisNumberPhone=preset.getString("numberPhone","");
-                        String thisBalanceStr=preset.getString("balance","");
-                        int thisBalance=Integer.parseInt(thisBalanceStr);
-                        int sendBalance=Integer.parseInt(writeCash);
+                        try {
+                            //consult credits of the user that send
+                            String thisName = preset.getString("name", "");
+                            String thisNumberPhone = preset.getString("numberPhone", "");
+                            String thisBalanceStr = preset.getString("balance", "");
+                            int thisBalance = Integer.parseInt(thisBalanceStr);
+                            long sendBalance = Long.parseLong(writeCash);
+
 
                         if(sendBalance<=thisBalance) {//credits valid
 
-                            /*------------------------need create history for this and the other user----------------------*/
+                            /*-----------------------------need create history for this and the other user------------------------*/
 
                             //first user that send
-                            openBDHistory.whereEqualTo(thisNumberPhone,thisNumberPhone).get().addOnCompleteListener(task2 -> {
+                            openBDThisUser.whereEqualTo("history","history").get().addOnCompleteListener(task2 -> {
 
                                 if(task2.isSuccessful()) {//validation successfully
                                     QuerySnapshot consult2=task2.getResult();
 
                                     if(consult2!=null&&!consult2.isEmpty()) {//is exist
-                                        final int newId[]=new int[1];
-                                        DocumentReference documentInitial,thisDocument;
-                                        documentInitial=openBDHistory.document(thisNumberPhone);//in history_numberPhone
+                                        final int newIdThis[]=new int[1];
 
-                                        openBDHistory.whereEqualTo(thisNumberPhone, thisNumberPhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        openBDThisUser.whereEqualTo("history","history").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                             int id=0;
 
                                             @Override
                                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                for(QueryDocumentSnapshot history:queryDocumentSnapshots){
-                                                    if(history!=null){
-                                                        id++;
-                                                    }
+                                                for(QueryDocumentSnapshot scan:queryDocumentSnapshots){
+                                                        //each one of the data in history
+                                                        Map <String, Object> date= scan.getData();
+                                                        id=date.size();
                                                 }
-                                            newId[0]=id;
+
+                                            newIdThis[0]=id;
                                             }
                                         });
 
                                         //this for obtain the number id, and can ++
-                                        int id=newId[0];
-                                        String idUnit=String.valueOf(id+1);
+                                        int thisId=newIdThis[0];
+                                        String id1=String.valueOf(thisId+1);
 
-                                        CollectionReference openSubFolder= documentInitial.collection(thisNumberPhone);//access to reference that need
-                                        thisDocument=openSubFolder.document(idUnit);
+                                        DocumentReference documentInitial=openBDThisUser.document(id1);
 
                                         //create a map for compilation of values
                                         Map<String, Object> map= new HashMap<>();
@@ -140,7 +147,7 @@ public class TransferActivity extends AppCompatActivity {
                                         map.put("message",writeMessage);
                                         map.put("status","send");
 
-                                        thisDocument.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        documentInitial.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override                                                                                                             	//    @Override
                                             public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
                                                 Toast.makeText(getApplicationContext(),"history this_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
@@ -153,7 +160,7 @@ public class TransferActivity extends AppCompatActivity {
                                         });
 
                                         //now user that receive
-                                        openBDHistory.whereEqualTo(writePhone,writePhone).get().addOnCompleteListener(task3 -> {
+                                        openBDOtherUser.whereEqualTo("history","history").get().addOnCompleteListener(task3 -> {
 
                                             if(task3.isSuccessful()) {//validation successfully
                                                 QuerySnapshot consult3=task3.getResult();
@@ -161,29 +168,26 @@ public class TransferActivity extends AppCompatActivity {
                                                 if(consult3!=null&&!consult3.isEmpty()) {//is exist
                                                     final int newIdOther[]=new int[1];
 
-                                                    DocumentReference documentInitialOther,otherDocument;
-                                                    documentInitialOther=openBDHistory.document(writePhone);//in history_numberPhone
-
-                                                    openBDHistory.whereEqualTo(writePhone, writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    openBDOtherUser.whereEqualTo("history","history").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                         int id=0;
 
                                                         @Override
                                                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                            for(QueryDocumentSnapshot history:queryDocumentSnapshots){
-                                                                if(history!=null){
-                                                                    id++;
-                                                                }
+                                                            for(QueryDocumentSnapshot scan:queryDocumentSnapshots){
+                                                                //each one of the data in history
+                                                                Map <String, Object> date= scan.getData();
+                                                                id=date.size();
                                                             }
+
                                                             newIdOther[0]=id;
                                                         }
                                                     });
 
                                                     //this for obtain the number id, and can ++
-                                                    int idOther=newIdOther[0];
-                                                    String idUnitOther=String.valueOf(idOther+1);
+                                                    int otherId=newIdOther[0];
+                                                    String id2=String.valueOf(otherId+1);
 
-                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference that need
-                                                    otherDocument=openSubFolderOther.document(idUnitOther);
+                                                    DocumentReference documentInitialOther=openBDOtherUser.document(id2);
 
                                                     //create a map for compilation of values
                                                     Map<String, Object> otherMap= new HashMap<>();
@@ -195,7 +199,7 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
-                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    documentInitialOther.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override                                                                                                             	//    @Override
                                                         public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(getApplicationContext(),"history other_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
@@ -212,12 +216,7 @@ public class TransferActivity extends AppCompatActivity {
 
                                                     String idOther="1";
 
-                                                    //this is equals a say "document=bd.collection("history").document(thisNumberPhone).document(id);"
-                                                    DocumentReference documentInitialOther, otherDocument;
-                                                    documentInitialOther=openBDHistory.document(writePhone);//create history_numberPhone
-
-                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference
-                                                    otherDocument=openSubFolderOther.document(idOther);//create in numberPhone the folder id "001" (history)
+                                                    DocumentReference documentInitialOther=openBDOtherUser.document(idOther);
 
                                                     //create a map for compilation of values
                                                     Map<String, Object> otherMap= new HashMap<>();
@@ -230,7 +229,7 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("status","receive");
 
                                                     //in "history" "numberPhone" "id(1)" we keep the map and send with "add" to bd
-                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    documentInitialOther.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override                                                                                                             //    @Override
                                                         public void onSuccess(Void unused) {//if completed                                                                    //    public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(getApplicationContext(),"create other history completed",Toast.LENGTH_SHORT).show();            //        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
@@ -251,12 +250,10 @@ public class TransferActivity extends AppCompatActivity {
 
 
 
-                                    }else {//not exist "create"      //this changed for test
+                                    }else {//not exist "create"
                                         String id = "1";
 
-                                        DocumentReference documentInitial=openBDHistory.document("history");
-                                        CollectionReference thisCollection=documentInitial.collection(thisNumberPhone);
-                                        DocumentReference thisDocument=thisCollection.document(id);//create in numberPhone the folder id "001" (history)
+                                        DocumentReference documentInitial=openBDThisUser.document(id);
 
                                         //create a map for compilation of values
                                         Map<String, Object> map= new HashMap<>();
@@ -269,21 +266,21 @@ public class TransferActivity extends AppCompatActivity {
                                         map.put("status","send");
 
                                         //in "history" with id personalized, we keep the map and send with "add" to bd
-                                        thisDocument.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override                                                                                                             //    @Override
-                                            public void onSuccess(Void unused) {//if completed                                                                    //    public void onSuccess(DocumentReference documentReference) {
-                                                Toast.makeText(getApplicationContext(),"create this history completed",Toast.LENGTH_SHORT).show();            //        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
-                                            }                                                                                                                     //    }
-                                        }).addOnFailureListener(new OnFailureListener() {                                                                         //}).addOnFailureListener(new OnFailureListener() {
-                                            @Override                                                                                                             //    @Override
-                                            public void onFailure(@NonNull Exception e) {//if failed                                                              //    public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(),"error create this history",Toast.LENGTH_SHORT).show();                 //        Toast.makeText(getApplicationContext(),"Error Database",Toast.LENGTH_SHORT).show();
-                                            }                                                                                                                     //    }
+                                        documentInitial.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getApplicationContext(),"create this history completed",Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(),"error create this history",Toast.LENGTH_SHORT).show();
+                                            }
                                         });
 
 
                                         //now user that receive
-                                        openBDHistory.whereEqualTo(writePhone,writePhone).get().addOnCompleteListener(task3 -> {
+                                        openBDOtherUser.whereEqualTo("history","history").get().addOnCompleteListener(task3 -> {
 
                                             if(task3.isSuccessful()) {//validation successfully
                                                 QuerySnapshot consult3=task3.getResult();
@@ -291,29 +288,26 @@ public class TransferActivity extends AppCompatActivity {
                                                 if(consult3!=null&&!consult3.isEmpty()) {//is exist
                                                     final int newIdOther[]=new int[1];
 
-                                                    DocumentReference documentInitialOther,otherDocument;
-                                                    documentInitialOther=openBDHistory.document(writePhone);//in history_numberPhone
-
-                                                    openBDHistory.whereEqualTo(writePhone, writePhone).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    openBDOtherUser.whereEqualTo("history","history").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                                         int id=0;
 
                                                         @Override
                                                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                                            for(QueryDocumentSnapshot history:queryDocumentSnapshots){
-                                                                if(history!=null){
-                                                                    id++;
-                                                                }
+                                                            for(QueryDocumentSnapshot scan:queryDocumentSnapshots){
+                                                                //each one of the data in history
+                                                                Map <String, Object> date= scan.getData();
+                                                                id=date.size();
                                                             }
+
                                                             newIdOther[0]=id;
                                                         }
                                                     });
 
                                                     //this for obtain the number id, and can ++
-                                                    int idOther=newIdOther[0];
-                                                    String idUnitOther=String.valueOf(idOther+1);
+                                                    int otherId=newIdOther[0];
+                                                    String id2=String.valueOf(otherId+1);
 
-                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference that need
-                                                    otherDocument=openSubFolderOther.document(idUnitOther);
+                                                    DocumentReference documentInitialOther=openBDOtherUser.document(id2);
 
                                                     //create a map for compilation of values
                                                     Map<String, Object> otherMap= new HashMap<>();
@@ -325,7 +319,7 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("message",writeMessage);
                                                     otherMap.put("status","receive");
 
-                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    documentInitialOther.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override                                                                                                             	//    @Override
                                                         public void onSuccess(Void unused) {//if completed                                                                    	//    public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(getApplicationContext(),"history other_add",Toast.LENGTH_SHORT).show();            							//        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
@@ -339,12 +333,7 @@ public class TransferActivity extends AppCompatActivity {
 
                                                 }else {//not exist "create"
 
-                                                    //this is equals a say "document=bd.collection("history").document(thisNumberPhone).document(id);"
-                                                    DocumentReference documentInitialOther, otherDocument;
-                                                    documentInitialOther=openBDHistory.document(writePhone);//create history_numberPhone
-
-                                                    CollectionReference openSubFolderOther= documentInitialOther.collection(writePhone);//access to reference
-                                                    otherDocument=openSubFolderOther.document(id);//create in numberPhone the folder id "001" (history)
+                                                    DocumentReference documentInitialOther=openBDOtherUser.document(id);
 
                                                     //create a map for compilation of values
                                                     Map<String, Object> otherMap= new HashMap<>();
@@ -357,7 +346,7 @@ public class TransferActivity extends AppCompatActivity {
                                                     otherMap.put("status","receive");
 
                                                     //in "history" "numberPhone" "id(001)" we keep the map and send with "add" to bd
-                                                    otherDocument.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    documentInitialOther.set(otherMap).addOnSuccessListener(new OnSuccessListener<Void>() {                                                    //bd.collection("user").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                         @Override                                                                                                             //    @Override
                                                         public void onSuccess(Void unused) {//if completed                                                                    //    public void onSuccess(DocumentReference documentReference) {
                                                             Toast.makeText(getApplicationContext(),"create other history completed",Toast.LENGTH_SHORT).show();            //        Toast.makeText(getApplicationContext(),"Saved successfully",Toast.LENGTH_SHORT).show();
@@ -376,18 +365,24 @@ public class TransferActivity extends AppCompatActivity {
 
                                         });
                                     }
-
-
-
-
                                 }else {//validation not successfully
                                     Toast.makeText(getApplicationContext(), "error taskThisNumberPhone", Toast.LENGTH_SHORT).show();
                                 }
                             });
 
+                            /*---------------------------finish create history for this and the other user------------------------*/
+
+
+
+
                         }else {//credits insufficient
                             Toast.makeText(getApplicationContext(), "credits insufficient", Toast.LENGTH_SHORT).show();
                         }
+
+                        }catch(Exception e){
+                            Toast.makeText(this,"number too long",Toast.LENGTH_SHORT).show();
+                        }
+
                     }else{//not exist
                         Toast.makeText(getApplicationContext(), "this number phone not exist", Toast.LENGTH_SHORT).show();
                     }

@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
 
         //View user                                             accessory                                               extras
-        email=findViewById(R.id.inEmail);             login = findViewById(R.id.textLogin);                   backgroundBlue = findViewById(R.id.azulLg);
+        email=findViewById(R.id.inEmail);                     login = findViewById(R.id.textLogin);                   backgroundBlue = findViewById(R.id.azulLg);
         password=findViewById(R.id.inPassword);               tableRegister = findViewById(R.id.tableRegister);       backgroundRed = findViewById(R.id.rojoLg);
         createAccount=findViewById(R.id.buttonCreateAccount);                                                           postBackground= findViewById(R.id.textViewPostBackground);
         entry=findViewById(R.id.buttonEntry);
@@ -68,8 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         openBD=bd.collection("user");
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
-
-        userConsult();
 
         if(userConsult()!=0){
 
@@ -171,10 +169,9 @@ public class LoginActivity extends AppCompatActivity {
                                             edit.commit();
 
                                             //reset the recommendList "for LobbyActivity" working...
-                                            if(!recommendList.isEmpty()&&recommendList!=null){
-                                                recommendList.clear();
-                                            }
-
+                                            //if(!recommendList.isEmpty()&&recommendList!=null){
+                                                //recommendList.clear();
+                                            //}
 
                                             Toast.makeText(LoginActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
                                             new Handler().postDelayed(new Runnable() {
@@ -294,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
         }, 10000);
     }
 
-    private int userConsult()/*this for get users "don´t has been sign off" through SharedPreferences */{
+    private int userConsult(){
         SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
         Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
         //confirm data
@@ -311,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
         return value;
     }
 
-    private void userSuggest(String user)/*this for initializing each user with adapterConfig "new", add a category in the adapter*/{
+    private void userSuggest(String user){
         recommendList=new ArrayList<>();
         recommendList.add(new AdapterConfig(user));
     }

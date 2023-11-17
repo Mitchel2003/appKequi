@@ -130,6 +130,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
                                 //clean errors
                                 inName.setError(null);inLastName.setError(null);inEmail.setError(null);inPassword.setError(null);inConfirmPassword.setError(null);inNumberPhone.setError(null);
+
+                                Intent go=new Intent(getApplicationContext(),LoginActivity.class);
+                                startActivity(go);
+                                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                finish();
                             }
                         }else{
                             Toast.makeText(this, "error task validate_RegisterActivity", Toast.LENGTH_SHORT).show();
