@@ -31,10 +31,10 @@ public class AutoCompleteAdapter extends ArrayAdapter<AdapterConfig>{
 
     private List<AdapterConfig> recommendListFull;
     private String userEmail;
+    
     public AutoCompleteAdapter(@NonNull Context context, @NonNull List<AdapterConfig> recommendList) {
         super(context, 0, recommendList);
         recommendListFull=new ArrayList<>(recommendList);
-
     }
 
     @NonNull

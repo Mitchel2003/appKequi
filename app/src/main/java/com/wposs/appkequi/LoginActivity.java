@@ -39,12 +39,16 @@ import java.util.Set;
 public class LoginActivity extends AppCompatActivity {
 
     //variables
-    private TextView backgroundBlue, backgroundRed,postBackground, login;  private Button entry, createAccount;
-    private AutoCompleteTextView email; private TextInputEditText password;
+    private TextView backgroundBlue, backgroundRed,postBackground, login;  
+    private Button entry, createAccount;
+    private AutoCompleteTextView email; 
+    private TextInputEditText password;
     private TableLayout tableRegister;
 
-    //DataBase Firebase
-    private FirebaseFirestore bd;    private CollectionReference openBD;    private DatabaseReference bdReference;
+    //DataBase FireBase
+    private FirebaseFirestore bd;        
+    private CollectionReference openBD;
+    private DatabaseReference bdReference;
     private FirebaseAuth auth;
 
     //for recommend the user if not signOff Session
@@ -57,51 +61,37 @@ public class LoginActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
 
-        //View user                                             accessory                                               extras
-        email=findViewById(R.id.inEmail);                     login = findViewById(R.id.textLogin);                   backgroundBlue = findViewById(R.id.azulLg);
-        password=findViewById(R.id.inPassword);               tableRegister = findViewById(R.id.tableRegister);       backgroundRed = findViewById(R.id.rojoLg);
-        createAccount=findViewById(R.id.buttonCreateAccount);                                                           postBackground= findViewById(R.id.textViewPostBackground);
+        //View                                                                                           
+        email=findViewById(R.id.inEmail);                                       
+        password=findViewById(R.id.inPassword);                    
+        createAccount=findViewById(R.id.buttonCreateAccount);                                                           
         entry=findViewById(R.id.buttonEntry);
+        
+        //accessory
+        login = findViewById(R.id.textLogin); 
+        tableRegister = findViewById(R.id.tableRegister);  
+        
+        //extras
+        backgroundBlue = findViewById(R.id.azulLg);
+        backgroundRed = findViewById(R.id.rojoLg);
+        postBackground= findViewById(R.id.textViewPostBackground);
 
-        //dataBase on                                           animations
-        bd= FirebaseFirestore.getInstance();                    animations();
+        //dataBase on                                           
+        bd= FirebaseFirestore.getInstance();                    
         openBD=bd.collection("user");
         bdReference= FirebaseDatabase.getInstance().getReference();//read or write
         auth=FirebaseAuth.getInstance();//authentication
+        
+        animations();
 
         if(userConsult()!=0){
-
-            AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
-            email.setAdapter(adapter);
-            email.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String email=adapter.getUserEmail();
-
-                    openBD.whereEqualTo("email",email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                //getting date password of FireStore
-                                String userPassword = document.getString("password");
-
-                                password.setText(userPassword);
-                            }
-                        }
-
-                    });
-                    Toast.makeText(getApplicationContext(),"Wait a moment",Toast.LENGTH_LONG).show();
-                }
-            });
+        	viewAdapterUser();
         }
 
     }
-
-
-
-
-    //buttons login
+    
+    //------------------------------------------------------------functions principals------------------------------------------------------------
+    //button entry
     public void entry(View see){
         //save user with sharedPreference
         SharedPreferences preset= getSharedPreferences("info", Context.MODE_PRIVATE);
@@ -233,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
+    //button go to activityRegister
     public void goToRegister(View see){
         Intent go=new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(go);
@@ -241,6 +231,60 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    
+    //------------------------------------------------------------tools------------------------------------------------------------
+    //for adapter "suggest user"
+    private int userConsult(){
+        SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
+        Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
+        
+        //confirm data
+        int value=userCompilation.size();
+
+        if(value!=0&&value!=-1){
+            for(String email:userCompilation){//insert in to arrayList
+                userSuggest(email);
+            }
+        }
+
+        return value;
+    }
+    private void userSuggest(String user){
+        recommendList=new ArrayList<>();
+        recommendList.add(new AdapterConfig(user));
+    }
+    
+    //action onClickItem
+    public void viewAdapterUser() {
+
+        AutoCompleteAdapter adapter=new AutoCompleteAdapter(this, recommendList);
+        email.setAdapter(adapter);
+        email.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String email=adapter.getUserEmail();
+
+                openBD.whereEqualTo("email",email).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            //getting date password of FireStore
+                            String userPassword = document.getString("password");
+
+                            password.setText(userPassword);
+                        }
+                    }
+
+                });
+                Toast.makeText(getApplicationContext(),"Wait a moment",Toast.LENGTH_LONG).show();
+            }
+        });
+    	
+    }
+
+    //------------------------------------------------------------ads------------------------------------------------------------
+    //animations spawn
     private void animations(){
         //animations
         Animation animBlue= AnimationUtils.loadAnimation(this,R.anim.lg_rotate_blue);
@@ -251,13 +295,16 @@ public class LoginActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                postBackground.startAnimation(animDown);    backgroundBlue.startAnimation(animBlue);
-                login.startAnimation(animDown);             backgroundRed.startAnimation(animRed);
+                postBackground.startAnimation(animDown);    
+                login.startAnimation(animDown);             
                 tableRegister.startAnimation(animDown);
                 email.startAnimation(animDown);
                 password.startAnimation(animDown);
                 entry.startAnimation(animDown);
                 createAccount.startAnimation(animDown);
+                
+                backgroundBlue.startAnimation(animBlue);
+                backgroundRed.startAnimation(animRed);
             }
         },0);
 
@@ -265,7 +312,6 @@ public class LoginActivity extends AppCompatActivity {
         rotateIconIzq(backgroundBlue);
         rotateIconDer(backgroundRed);
     }
-    //-----------------------------------------ads------------------------------------------------------
     private void rotateIconDer (View see){
         RotateAnimation rotationDer = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotationDer.setDuration(4000);
@@ -291,27 +337,4 @@ public class LoginActivity extends AppCompatActivity {
         }, 10000);
     }
 
-    private int userConsult(){
-        SharedPreferences preset=getSharedPreferences("info",Context.MODE_PRIVATE);
-        Set<String> userCompilation=preset.getStringSet("userEmail",new HashSet<>());
-        //confirm data
-        int value=userCompilation.size();
-
-        if(value!=0){
-
-            for(String email:userCompilation){//insert in to arrayList
-                userSuggest(email);
-            }
-
-        }
-
-        return value;
-    }
-
-    private void userSuggest(String user){
-        recommendList=new ArrayList<>();
-        recommendList.add(new AdapterConfig(user));
-    }
-
-    //--------------------------------------setter and getters--------------------------------------
 }

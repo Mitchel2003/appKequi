@@ -31,13 +31,21 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    //variables                                                                                                     layout
-    private TextInputLayout name, lastName, email, password, confirmPassword, numberPhone;                          private TextView textRegister, postBackground;
-    private TextInputEditText inName, inLastName, inEmail, inPassword, inConfirmPassword, inNumberPhone;            private ImageButton buttonBack;     private Button buttonValidate;     private ScrollView table;
-
-    //DataBase Firebase Fire Store
-    private FirebaseFirestore bd;           private final int money= 1000000;
-    private CollectionReference openBD;     private final String currency="peso";
+    //variables                                                                                                     
+    private TextInputLayout name, lastName, email, password, confirmPassword, numberPhone;                          
+    private TextInputEditText inName, inLastName, inEmail, inPassword, inConfirmPassword, inNumberPhone;            
+    private final int money= 1000000;
+    private final String currency="peso";
+    
+    //layout
+    private TextView textRegister, postBackground;
+    private ImageButton buttonBack;         
+    private Button buttonValidate;
+    private ScrollView table;
+    
+    //DataBase FireBase
+    private FirebaseFirestore bd;           
+    private CollectionReference openBD;     
     private FirebaseAuth auth;
     private DocumentReference document;
 
@@ -48,12 +56,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//fullScreen
 
-        //layout                                                    components
-        name=findViewById(R.id.editName);                           textRegister=findViewById(R.id.textRegister);
-        inName=findViewById(R.id.inName);                           buttonBack=findViewById(R.id.buttonOptions);
-        lastName=findViewById(R.id.editLastName);                   buttonValidate=findViewById(R.id.buttonValidate);
-        inLastName=findViewById(R.id.inLastName);                   table=findViewById(R.id.scrollView);
-        email=findViewById(R.id.editEmail);                         postBackground=findViewById(R.id.textPostBackground);
+        //layout                                                    
+        name=findViewById(R.id.editName);                           
+        inName=findViewById(R.id.inName);                           
+        lastName=findViewById(R.id.editLastName);                   
+        inLastName=findViewById(R.id.inLastName);                   
+        email=findViewById(R.id.editEmail);                         
         inEmail=findViewById(R.id.inEmail);
         password=findViewById(R.id.editPassword);
         inPassword=findViewById(R.id.inPassword);
@@ -62,47 +70,25 @@ public class RegisterActivity extends AppCompatActivity {
         numberPhone=findViewById(R.id.editNumberPhone);
         inNumberPhone=findViewById(R.id.inNumberPhone);
 
-        //OnBD                                  //animations
-        bd=FirebaseFirestore.getInstance();     animations();
+        //components
+        textRegister=findViewById(R.id.textRegister);
+        buttonBack=findViewById(R.id.buttonOptions);
+        buttonValidate=findViewById(R.id.buttonValidate);
+        table=findViewById(R.id.scrollView);
+        postBackground=findViewById(R.id.textPostBackground);
+        
+        //dataBase on                                  
+        bd=FirebaseFirestore.getInstance();     
         openBD=bd.collection("user");
         auth=FirebaseAuth.getInstance();
-
-            inEmail.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    validationEmail();
-                    }
-
-            });
-            inPassword.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    validationPassword();
-                }
-            });
+        
+        animations();
+        
+        onChangeText();
     }
-
+    
+    //------------------------------------------------------------functions principals------------------------------------------------------------
+    //button validate
     public void validate(View see){
         try {
             //converting layout in string
@@ -168,8 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
-    //-------------------------------------------------ads------------------------------------------
+    //button back
     public void goToBack(View see){
         Intent go=new Intent(RegisterActivity.this,LoginActivity.class);
         startActivity(go);
@@ -177,11 +162,53 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
 
+    
+    //------------------------------------------------------------tools------------------------------------------------------------
+    //textWatcher
+    public void onChangeText(){
+    	inEmail.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validationEmail();
+                }
+
+        });
+        inPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validationPassword();
+            }
+        });
+    }
     //Validation email and password
     private void validationEmail(){
-        //of textInputEditText to string                            multiChar
-        String tempEmail=inEmail.getText().toString();              String case1="This site can´t been empty";
-                                                                    String case2="Please, enter a valid email";
+        //of textInputEditText to string
+        String tempEmail=inEmail.getText().toString();
+        
+        String case1="This site can´t been empty";
+        String case2="Please, enter a valid email";
+        
         if(tempEmail.isEmpty()) {
             email.setError(case1);
         }else if(!PatternsCompat.EMAIL_ADDRESS.matcher(tempEmail).matches()) {// compare and return true if there is a match with regular expressions
@@ -191,29 +218,22 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
     private void validationPassword(){
-        //of textInputEditText to string                                multiChar
-        String tempPassword=inPassword.getText().toString();            String case1="This site can´t been empty";
-                                                                        String case2="Password is too weak";
+        //of textInputEditText to string                                
+        String tempPassword=inPassword.getText().toString();            
+
+        String case1="This site can´t been empty";
+        String case2="Password is too weak";
+        
         if(tempPassword.isEmpty()) {
             password.setError(case1);
-        }else if(tempPassword.length()<4) {/*matches return boolean; says if is equalizer or not*/
+        }else if(tempPassword.length()<4) {
             password.setError(case2);
         }else {
             password.setError(null);
         }
     }
-
-
-    //animations
-    public void animations(){
-        Animation down= AnimationUtils.loadAnimation(this,R.anim.rg_transition_down);
-
-        textRegister.startAnimation(down);
-        buttonBack.startAnimation(down);
-        buttonValidate.startAnimation(down);
-        table.startAnimation(down);
-        postBackground.startAnimation(down);
-    }
+    
+    
     //send to FireStore
     private void putDate(String name, String lastName, String email, String password, String numberPhone){
         //create documentReference with bd "user" and a id specific
@@ -243,5 +263,20 @@ public class RegisterActivity extends AppCompatActivity {
         });                                                                                                                       //});
 
     }
+    
+    
+    //------------------------------------------------------------ads------------------------------------------------------------
+    //animations spawn
+    public void animations(){
+        Animation down= AnimationUtils.loadAnimation(this,R.anim.rg_transition_down);
+
+        textRegister.startAnimation(down);
+        buttonBack.startAnimation(down);
+        buttonValidate.startAnimation(down);
+        table.startAnimation(down);
+        postBackground.startAnimation(down);
+    }
+    
+    
 
 }
